@@ -8,14 +8,14 @@ namespace InocuoGoMetrics.API.Models
     {
         [Key]
         [Column("idcan")]
-        public int IdCan { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public short IdCan { get; set; } // SMALLSERIAL
 
         [Required]
-        [StringLength(50)]
         [Column("nombrecan")]
         public string NombreCan { get; set; } = string.Empty;
 
         // Relaciones
-        public ICollection<Conversacion>? Conversaciones { get; set; }
+        public ICollection<Usuario>? Usuarios { get; set; }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-
 namespace InocuoGoMetrics.API.Models
 {
     [Table("organizaciones")]
@@ -9,10 +8,9 @@ namespace InocuoGoMetrics.API.Models
     {
         [Key]
         [Column("idorg")]
-        public int IdOrg { get; set; }
+        public Guid IdOrg { get; set; } = Guid.NewGuid();
 
         [Required]
-        [StringLength(100)]
         [Column("nombreorg")]
         public string NombreOrg { get; set; } = string.Empty;
 
@@ -21,5 +19,8 @@ namespace InocuoGoMetrics.API.Models
 
         // Relaciones
         public ICollection<Chatbot>? Chatbots { get; set; }
+        public ICollection<Usuario>? Usuarios { get; set; }
+        public ICollection<UsuarioAdmin>? UsuariosAdmin { get; set; }
+        public ICollection<Topico>? Topicos { get; set; }
     }
 }

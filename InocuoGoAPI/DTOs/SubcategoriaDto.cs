@@ -12,7 +12,7 @@ namespace InocuoGoMetrics.API.DTOs
         public string? DescriSub { get; set; }
 
         [Required]
-        public long IdTemSub { get; set; } // Cambiado a long
+        public long IdTemSub { get; set; }  // ✅ long
     }
 
     public class SubcategoriaUpdateDto
@@ -25,7 +25,7 @@ namespace InocuoGoMetrics.API.DTOs
         public string? DescriSub { get; set; }
 
         [Required]
-        public long IdTemSub { get; set; } // Cambiado a long
+        public long IdTemSub { get; set; }  // ✅ long
 
         public bool ActivoSub { get; set; }
     }

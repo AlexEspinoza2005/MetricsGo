@@ -10,7 +10,6 @@ namespace InocuoGoMetrics.API.Data
         {
         }
 
-        // DbSets para cada tabla
         public DbSet<Organizacion> Organizaciones { get; set; }
         public DbSet<Chatbot> Chatbots { get; set; }
         public DbSet<Canal> Canales { get; set; }
@@ -26,66 +25,42 @@ namespace InocuoGoMetrics.API.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Configuraciones adicionales si son necesarias
+            // Clave compuesta para Clasificaciones
+            modelBuilder.Entity<Clasificacion>()
+                .HasKey(c => new { c.IdMenCla, c.IdSubCla });
 
             // Índices únicos
             modelBuilder.Entity<Organizacion>()
                 .HasIndex(o => o.NombreOrg)
                 .IsUnique();
 
+            modelBuilder.Entity<UsuarioAdmin>()
+                .HasIndex(u => u.CorreoAdm)
+                .IsUnique();
+
             modelBuilder.Entity<Canal>()
                 .HasIndex(c => c.NombreCan)
                 .IsUnique();
 
-            // Relaciones (ya están definidas en los modelos con [ForeignKey], pero se pueden reforzar aquí)
+            // Unique constraint para Usuario Final
+            modelBuilder.Entity<Usuario>()
+                .HasIndex(u => new { u.IdOrgUsu, u.IdCanUsu, u.IdCanalUsu })
+                .IsUnique();
 
-            // Organización -> Chatbots
+            // Unique constraint para Chatbot
             modelBuilder.Entity<Chatbot>()
-                .HasOne(c => c.Organizacion)
-                .WithMany(o => o.Chatbots)
-                .HasForeignKey(c => c.IdOrgBot)
-                .OnDelete(DeleteBehavior.Restrict);
+                .HasIndex(c => new { c.IdOrgBot, c.NombreBot })
+                .IsUnique();
 
-            // Usuario -> Conversaciones
-            modelBuilder.Entity<Conversacion>()
-                .HasOne(c => c.Usuario)
-                .WithMany(u => u.Conversaciones)
-                .HasForeignKey(c => c.IdUsuCon)
-                .OnDelete(DeleteBehavior.Restrict);
+            // Unique constraint para Tema
+            modelBuilder.Entity<Topico>()
+                .HasIndex(t => new { t.IdOrgTem, t.NombreTem })
+                .IsUnique();
 
-            // Chatbot -> Conversaciones
-            modelBuilder.Entity<Conversacion>()
-                .HasOne(c => c.Chatbot)
-                .WithMany(b => b.Conversaciones)
-                .HasForeignKey(c => c.IdBotCon)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            // Conversación -> Mensajes
-            modelBuilder.Entity<Mensaje>()
-                .HasOne(m => m.Conversacion)
-                .WithMany(c => c.Mensajes)
-                .HasForeignKey(m => m.IdConMen)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            // Tópico -> Subcategorías
+            // Unique constraint para Subcategoría
             modelBuilder.Entity<Subcategoria>()
-                .HasOne(s => s.Topico)
-                .WithMany(t => t.Subcategorias)
-                .HasForeignKey(s => s.IdTemSub)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            // Clasificaciones (relación con Mensaje y Subcategoría)
-            modelBuilder.Entity<Clasificacion>()
-                .HasOne(c => c.Mensaje)
-                .WithMany(m => m.Clasificaciones)
-                .HasForeignKey(c => c.IdMenCla)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<Clasificacion>()
-                .HasOne(c => c.Subcategoria)
-                .WithMany(s => s.Clasificaciones)
-                .HasForeignKey(c => c.IdSubCla)
-                .OnDelete(DeleteBehavior.Restrict);
+                .HasIndex(s => new { s.IdTemSub, s.NombreSub })
+                .IsUnique();
         }
     }
 }

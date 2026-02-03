@@ -9,7 +9,7 @@
 
     public class ConversacionResumenDto
     {
-        public int IdCon { get; set; }
+        public Guid IdCon { get; set; }  // ✅ Guid
         public string Usuario { get; set; } = string.Empty;
         public string Chatbot { get; set; } = string.Empty;
         public string? EstadoCon { get; set; }
@@ -19,9 +19,10 @@
 
     public class MensajeResumenDto
     {
-        public int IdMen { get; set; }
+        public long IdMen { get; set; }  // ✅ long
         public string TipoMen { get; set; } = string.Empty;
         public string CuerpoMen { get; set; } = string.Empty;
         public DateTime CreadoMen { get; set; }
     }
+
 }

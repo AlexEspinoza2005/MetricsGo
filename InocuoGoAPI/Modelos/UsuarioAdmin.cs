@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-
 namespace InocuoGoMetrics.API.Models
 {
     [Table("usuarios_admin")]
@@ -9,7 +8,11 @@ namespace InocuoGoMetrics.API.Models
     {
         [Key]
         [Column("idadm")]
-        public int IdAdm { get; set; }
+        public Guid IdAdm { get; set; } = Guid.NewGuid();
+
+        [Required]
+        [Column("idorg_adm")]
+        public Guid IdOrgAdm { get; set; }
 
         [Required]
         [StringLength(100)]
@@ -17,16 +20,17 @@ namespace InocuoGoMetrics.API.Models
         public string NombreAdm { get; set; } = string.Empty;
 
         [Required]
-        [Column("idorg_adm")]
-        public int IdOrgAdm { get; set; }
+        [EmailAddress]
+        [Column("correoadm")]
+        public string CorreoAdm { get; set; } = string.Empty;
 
+        [Required]
         [StringLength(100)]
         [Column("passwadm")]
-        public string? PassAdm { get; set; }
+        public string PasswAdm { get; set; } = string.Empty;
 
-        [StringLength(50)]
         [Column("logintadm")]
-        public string? LoginAdm { get; set; }
+        public DateTime? LogintAdm { get; set; } // Timestamp del último login
 
         [Column("creadoadm")]
         public DateTime CreadoAdm { get; set; } = DateTime.UtcNow;

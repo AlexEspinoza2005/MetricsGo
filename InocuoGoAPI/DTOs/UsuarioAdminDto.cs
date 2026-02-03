@@ -14,13 +14,11 @@ namespace InocuoGoMetrics.API.DTOs
         public string CorreoAdm { get; set; } = string.Empty;
 
         [Required]
-        public Guid IdOrgAdm { get; set; }
+        public Guid IdOrgAdm { get; set; }  // ✅ Guid
 
         [Required]
         [StringLength(100)]
         public string PassAdm { get; set; } = string.Empty;
-
-        // NO hay LoginAdm aquí - en la BD es DateTime? para timestamp de último login
     }
 
     public class UsuarioAdminUpdateDto
@@ -34,11 +32,9 @@ namespace InocuoGoMetrics.API.DTOs
         public string CorreoAdm { get; set; } = string.Empty;
 
         [Required]
-        public Guid IdOrgAdm { get; set; }
+        public Guid IdOrgAdm { get; set; }  // ✅ Guid
 
         [StringLength(100)]
         public string? PassAdm { get; set; }
-
-        // NO hay LoginAdm aquí
     }
 }

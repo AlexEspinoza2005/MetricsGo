@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-
 namespace InocuoGoMetrics.API.Models
 {
     [Table("mensajes")]
@@ -9,27 +8,26 @@ namespace InocuoGoMetrics.API.Models
     {
         [Key]
         [Column("idmen")]
-        public int IdMen { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public long IdMen { get; set; } // BIGSERIAL
 
+        [Required]
         [Column("idcon_men")]
-        public int IdConMen { get; set; }
+        public Guid IdConMen { get; set; }
+
+        [Required]
+        [Column("direccionmen")]
+        public string DireccionMen { get; set; } = string.Empty; // 'entrada' o 'salida'
 
         [Required]
         [Column("tipomen")]
-        public string TipoMen { get; set; } = string.Empty;
+        public string TipoMen { get; set; } = "texto";
 
-        [Required]
         [Column("cuerpomen")]
-        public string CuerpoMen { get; set; } = string.Empty;
-
-        [Column("direccionmen")]
-        public string? DireccionMen { get; set; }
+        public string? CuerpoMen { get; set; }
 
         [Column("creadomen")]
         public DateTime CreadoMen { get; set; } = DateTime.UtcNow;
-
-        [Column("idcon_mer")]
-        public string? IdconMer { get; set; }
 
         // Relaciones
         [ForeignKey("IdConMen")]

@@ -1,8 +1,8 @@
-﻿using InocuoGoMetrics.API.Data;
-using InocuoGoMetrics.API.DTOs;
-using InocuoGoMetrics.API.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using InocuoGoMetrics.API.Data;
+using InocuoGoMetrics.API.Models;
+using InocuoGoMetrics.API.DTOs;
 
 namespace InocuoGoMetrics.API.Controllers
 {
@@ -29,7 +29,7 @@ namespace InocuoGoMetrics.API.Controllers
 
         // GET: api/Subcategorias/topico/5
         [HttpGet("topico/{topicoId}")]
-        public async Task<ActionResult<IEnumerable<Subcategoria>>> GetSubcategoriasPorTopico(int topicoId)
+        public async Task<ActionResult<IEnumerable<Subcategoria>>> GetSubcategoriasPorTopico(long topicoId)  // ✅ CAMBIO: int → long
         {
             return await _context.Subcategorias
                 .Where(s => s.IdTemSub == topicoId && s.ActivoSub)
@@ -38,7 +38,7 @@ namespace InocuoGoMetrics.API.Controllers
 
         // GET: api/Subcategorias/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Subcategoria>> GetSubcategoria(int id)
+        public async Task<ActionResult<Subcategoria>> GetSubcategoria(long id)  // ✅ CAMBIO: int → long
         {
             var subcategoria = await _context.Subcategorias
                 .Include(s => s.Topico)
@@ -54,10 +54,16 @@ namespace InocuoGoMetrics.API.Controllers
 
         // POST: api/Subcategorias
         [HttpPost]
-        public async Task<ActionResult<Subcategoria>> PostSubcategoria(Subcategoria subcategoria)
+        public async Task<ActionResult<Subcategoria>> PostSubcategoria(SubcategoriaCreateDto dto)  // ✅ CAMBIO: usa DTO
         {
-            subcategoria.CreadoSub = DateTime.UtcNow;
-            subcategoria.ActivoSub = true;
+            var subcategoria = new Subcategoria
+            {
+                NombreSub = dto.NombreSub,
+                DescriSub = dto.DescriSub,
+                IdTemSub = dto.IdTemSub,
+                ActivoSub = true,
+                CreadoSub = DateTime.UtcNow
+            };
 
             _context.Subcategorias.Add(subcategoria);
             await _context.SaveChangesAsync();
@@ -67,14 +73,18 @@ namespace InocuoGoMetrics.API.Controllers
 
         // PUT: api/Subcategorias/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutSubcategoria(int id, Subcategoria subcategoria)
+        public async Task<IActionResult> PutSubcategoria(long id, SubcategoriaUpdateDto dto)  // ✅ CAMBIO: int → long, usa DTO
         {
-            if (id != subcategoria.IdSub)
+            var subcategoria = await _context.Subcategorias.FindAsync(id);
+            if (subcategoria == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            _context.Entry(subcategoria).State = EntityState.Modified;
+            subcategoria.NombreSub = dto.NombreSub;
+            subcategoria.DescriSub = dto.DescriSub;
+            subcategoria.IdTemSub = dto.IdTemSub;
+            subcategoria.ActivoSub = dto.ActivoSub;
 
             try
             {
@@ -97,7 +107,7 @@ namespace InocuoGoMetrics.API.Controllers
 
         // DELETE: api/Subcategorias/5 (Soft delete)
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteSubcategoria(int id)
+        public async Task<IActionResult> DeleteSubcategoria(long id)  // ✅ CAMBIO: int → long
         {
             var subcategoria = await _context.Subcategorias.FindAsync(id);
             if (subcategoria == null)
@@ -112,7 +122,7 @@ namespace InocuoGoMetrics.API.Controllers
             return NoContent();
         }
 
-        private bool SubcategoriaExists(int id)
+        private bool SubcategoriaExists(long id)  // ✅ CAMBIO: int → long
         {
             return _context.Subcategorias.Any(e => e.IdSub == id);
         }

@@ -1,7 +1,5 @@
-﻿// Models/Usuario.cs (para usuarios_finales)
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
 
 namespace InocuoGoMetrics.API.Models
 {
@@ -10,18 +8,23 @@ namespace InocuoGoMetrics.API.Models
     {
         [Key]
         [Column("idusu")]
-        public int IdUsu { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public long IdUsu { get; set; } // BIGSERIAL
 
         [Required]
-        [StringLength(100)]
-        [Column("nombreusu")]
-        public string NombreUsu { get; set; } = string.Empty;
-
-        [Column("idcan_usu")]
-        public int IdCanUsu { get; set; }
-
         [Column("idorg_usu")]
-        public int IdOrgUsu { get; set; }
+        public Guid IdOrgUsu { get; set; }
+
+        [Required]
+        [Column("idcan_usu")]
+        public short IdCanUsu { get; set; }
+
+        [Required]
+        [Column("idcanalusu")]
+        public string IdCanalUsu { get; set; } = string.Empty; // ID del canal externo (ej: número WhatsApp)
+
+        [Column("nombreusu")]
+        public string? NombreUsu { get; set; }
 
         [Column("activousu")]
         public bool ActivoUsu { get; set; } = true;
@@ -30,11 +33,11 @@ namespace InocuoGoMetrics.API.Models
         public DateTime CreadoUsu { get; set; } = DateTime.UtcNow;
 
         // Relaciones
-        [ForeignKey("IdCanUsu")]
-        public Canal? Canal { get; set; }
-
         [ForeignKey("IdOrgUsu")]
         public Organizacion? Organizacion { get; set; }
+
+        [ForeignKey("IdCanUsu")]
+        public Canal? Canal { get; set; }
 
         public ICollection<Conversacion>? Conversaciones { get; set; }
     }

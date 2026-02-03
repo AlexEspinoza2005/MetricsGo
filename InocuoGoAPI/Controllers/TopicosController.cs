@@ -1,8 +1,8 @@
-﻿using InocuoGoMetrics.API.Data;
-using InocuoGoMetrics.API.DTOs;
-using InocuoGoMetrics.API.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using InocuoGoMetrics.API.Data;
+using InocuoGoMetrics.API.Models;
+using InocuoGoMetrics.API.DTOs;
 
 namespace InocuoGoMetrics.API.Controllers
 {
@@ -23,16 +23,18 @@ namespace InocuoGoMetrics.API.Controllers
         {
             return await _context.Topicos
                 .Include(t => t.Subcategorias)
+                .Include(t => t.Organizacion)
                 .Where(t => t.ActivoTem)
                 .ToListAsync();
         }
 
         // GET: api/Topicos/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Topico>> GetTopico(int id)
+        public async Task<ActionResult<Topico>> GetTopico(long id)  // ✅ CAMBIO: int → long
         {
             var topico = await _context.Topicos
                 .Include(t => t.Subcategorias)
+                .Include(t => t.Organizacion)
                 .FirstOrDefaultAsync(t => t.IdTem == id);
 
             if (topico == null)
@@ -45,10 +47,16 @@ namespace InocuoGoMetrics.API.Controllers
 
         // POST: api/Topicos
         [HttpPost]
-        public async Task<ActionResult<Topico>> PostTopico(Topico topico)
+        public async Task<ActionResult<Topico>> PostTopico(TopicoCreateDto dto)  // ✅ CAMBIO: usa DTO
         {
-            topico.CreadoTem = DateTime.UtcNow;
-            topico.ActivoTem = true;
+            var topico = new Topico
+            {
+                NombreTem = dto.NombreTem,
+                DescriTem = dto.DescriTem,
+                IdOrgTem = dto.IdOrgTem,  // ✅ NUEVO: requiere organización
+                ActivoTem = true,
+                CreadoTem = DateTime.UtcNow
+            };
 
             _context.Topicos.Add(topico);
             await _context.SaveChangesAsync();
@@ -58,14 +66,18 @@ namespace InocuoGoMetrics.API.Controllers
 
         // PUT: api/Topicos/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTopico(int id, Topico topico)
+        public async Task<IActionResult> PutTopico(long id, TopicoUpdateDto dto)  // ✅ CAMBIO: int → long, usa DTO
         {
-            if (id != topico.IdTem)
+            var topico = await _context.Topicos.FindAsync(id);
+            if (topico == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            _context.Entry(topico).State = EntityState.Modified;
+            topico.NombreTem = dto.NombreTem;
+            topico.DescriTem = dto.DescriTem;
+            topico.IdOrgTem = dto.IdOrgTem;
+            topico.ActivoTem = dto.ActivoTem;
 
             try
             {
@@ -88,7 +100,7 @@ namespace InocuoGoMetrics.API.Controllers
 
         // DELETE: api/Topicos/5 (Soft delete)
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTopico(int id)
+        public async Task<IActionResult> DeleteTopico(long id)  // ✅ CAMBIO: int → long
         {
             var topico = await _context.Topicos.FindAsync(id);
             if (topico == null)
@@ -103,7 +115,7 @@ namespace InocuoGoMetrics.API.Controllers
             return NoContent();
         }
 
-        private bool TopicoExists(int id)
+        private bool TopicoExists(long id)  // ✅ CAMBIO: int → long
         {
             return _context.Topicos.Any(e => e.IdTem == id);
         }

@@ -14,7 +14,7 @@ namespace InocuoGoMetrics.API.DTOs
         public string? DescriTem { get; set; }
 
         [Required]
-        public Guid IdOrgTem { get; set; } // Añadido: necesita organización
+        public Guid IdOrgTem { get; set; }  // ✅ Guid
     }
 
     public class TopicoUpdateDto
@@ -27,7 +27,7 @@ namespace InocuoGoMetrics.API.DTOs
         public string? DescriTem { get; set; }
 
         [Required]
-        public Guid IdOrgTem { get; set; }
+        public Guid IdOrgTem { get; set; }  // ✅ Guid
 
         public bool ActivoTem { get; set; }
     }

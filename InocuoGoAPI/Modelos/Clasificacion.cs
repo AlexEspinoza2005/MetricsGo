@@ -1,21 +1,19 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-
 namespace InocuoGoMetrics.API.Models
 {
     [Table("clasificaciones")]
     public class Clasificacion
     {
-        [Key]
-        [Column("idmen_cla")]
-        public int IdMenCla { get; set; }
+        [Key, Column("idmen_cla", Order = 0)]
+        public long IdMenCla { get; set; }
 
-        [Column("idsub_cla")]
-        public int IdSubCla { get; set; }
+        [Key, Column("idsub_cla", Order = 1)]
+        public long IdSubCla { get; set; }
 
-        [Column("confianza")]
-        public decimal? Confianza { get; set; }
+        [Column("confianzacla")]
+        public decimal? ConfianzaCla { get; set; }
 
         // Relaciones
         [ForeignKey("IdMenCla")]

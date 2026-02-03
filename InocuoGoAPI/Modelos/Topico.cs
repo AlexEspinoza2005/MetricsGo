@@ -8,7 +8,12 @@ namespace InocuoGoMetrics.API.Models
     {
         [Key]
         [Column("idtem")]
-        public int IdTem { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public long IdTem { get; set; } // BIGSERIAL
+
+        [Required]
+        [Column("idorg_tem")]
+        public Guid IdOrgTem { get; set; }
 
         [Required]
         [StringLength(100)]
@@ -26,6 +31,9 @@ namespace InocuoGoMetrics.API.Models
         public DateTime CreadoTem { get; set; } = DateTime.UtcNow;
 
         // Relaciones
+        [ForeignKey("IdOrgTem")]
+        public Organizacion? Organizacion { get; set; }
+
         public ICollection<Subcategoria>? Subcategorias { get; set; }
     }
 }

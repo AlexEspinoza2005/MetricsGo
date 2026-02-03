@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-
 namespace InocuoGoMetrics.API.Models
 {
     [Table("conversaciones")]
@@ -9,29 +8,32 @@ namespace InocuoGoMetrics.API.Models
     {
         [Key]
         [Column("idcon")]
-        public int IdCon { get; set; }
+        public Guid IdCon { get; set; } = Guid.NewGuid();
 
-        [Column("idusu_con")]
-        public int IdUsuCon { get; set; }
-
+        [Required]
         [Column("idbot_con")]
-        public int IdBotCon { get; set; }
+        public Guid IdBotCon { get; set; }
 
+        [Required]
+        [Column("idusu_con")]
+        public long IdUsuCon { get; set; }
+
+        [Required]
         [Column("estadocon")]
-        public string? EstadoCon { get; set; }
+        public string EstadoCon { get; set; } = "abierta"; // 'abierta' o 'cerrada'
 
         [Column("iniciocon")]
-        public DateTime? Iniciocon { get; set; }
+        public DateTime Iniciocon { get; set; } = DateTime.UtcNow;
 
         [Column("actualizacon")]
-        public DateTime? ActualizaCon { get; set; }
+        public DateTime ActualizaCon { get; set; } = DateTime.UtcNow;
 
         // Relaciones
-        [ForeignKey("IdUsuCon")]
-        public Usuario? Usuario { get; set; }
-
         [ForeignKey("IdBotCon")]
         public Chatbot? Chatbot { get; set; }
+
+        [ForeignKey("IdUsuCon")]
+        public Usuario? Usuario { get; set; }
 
         public ICollection<Mensaje>? Mensajes { get; set; }
     }

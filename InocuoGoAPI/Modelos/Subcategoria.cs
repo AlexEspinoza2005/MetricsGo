@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-
 namespace InocuoGoMetrics.API.Models
 {
     [Table("subcategorias")]
@@ -9,7 +8,12 @@ namespace InocuoGoMetrics.API.Models
     {
         [Key]
         [Column("idsub")]
-        public int IdSub { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public long IdSub { get; set; } // BIGSERIAL
+
+        [Required]
+        [Column("idtem_sub")]
+        public long IdTemSub { get; set; }
 
         [Required]
         [StringLength(100)]
@@ -19,9 +23,6 @@ namespace InocuoGoMetrics.API.Models
         [StringLength(500)]
         [Column("descrisub")]
         public string? DescriSub { get; set; }
-
-        [Column("idtem_sub")]
-        public int IdTemSub { get; set; }
 
         [Column("activosub")]
         public bool ActivoSub { get; set; } = true;
