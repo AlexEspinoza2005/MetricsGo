@@ -1,0 +1,132 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - InocuoGo</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 250px;
+            background: linear-gradient(180deg, #2ecc71 0%, #27ae60 100%);
+            color: white;
+            padding: 20px 0;
+            overflow-y: auto;
+        }
+
+            .sidebar .nav-link {
+                color: rgba(255,255,255,0.8);
+                padding: 12px 20px;
+                margin: 5px 15px;
+                border-radius: 8px;
+                transition: all 0.3s;
+            }
+
+                .sidebar .nav-link:hover, .sidebar .nav-link.active {
+                    background: rgba(255,255,255,0.2);
+                    color: white;
+                }
+
+                .sidebar .nav-link i {
+                    margin-right: 10px;
+                    width: 20px;
+                }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 30px;
+            background: #f8f9fa;
+            min-height: 100vh;
+        }
+
+        .section-title {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.7;
+            padding: 10px 20px 5px 20px;
+            margin-top: 20px;
+        }
+
+        hr.sidebar-divider {
+            border-color: rgba(255,255,255,0.3);
+            margin: 20px 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="text-center mb-4 px-3">
+                <i class="fas fa-leaf fa-3x mb-2"></i>
+                <h4 class="mb-0">InocuoGo</h4>
+                <small style="opacity: 0.8;">Dashboard</small>
+            </div>
+
+            <hr class="sidebar-divider">
+
+            <div class="section-title">Agente Virtual</div>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Home" asp-action="Index">
+                        <i class="fas fa-chart-line"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Topicos" asp-action="Index">
+                        <i class="fas fa-book"></i> Tópicos
+                    </a>
+                </li>
+            </ul>
+
+            <div class="section-title">Sistema</div>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Usuarios" asp-action="Index">
+                        <i class="fas fa-users"></i> Usuarios
+                    </a>
+                </li>
+            </ul>
+
+            <hr class="sidebar-divider">
+
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Home" asp-action="EditarPerfil">
+                        <i class="fas fa-user-edit"></i> Editar Perfil
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Auth" asp-action="Logout">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

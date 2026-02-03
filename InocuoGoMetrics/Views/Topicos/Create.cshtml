@@ -1,0 +1,28 @@
+﻿@model InocuoGoMetrics.Models.Topico
+@{
+    ViewData["Title"] = "Nuevo Tópico";
+}
+
+<h2 class="mb-4">Nuevo Tópico</h2>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <form asp-action="Create" method="post">
+            @Html.AntiForgeryToken()
+            <div class="mb-3">
+                <label class="form-label">Título</label>
+                <input asp-for="Titulo" class="form-control" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Descripción</label>
+                <textarea asp-for="Descripcion" class="form-control" rows="3" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Icono (Font Awesome)</label>
+                <input asp-for="Icono" class="form-control" placeholder="fa-book" />
+            </div>
+            <button type="submit" class="btn btn-success">Guardar</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>
