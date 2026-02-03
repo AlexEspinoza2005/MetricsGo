@@ -24,6 +24,7 @@
             color: white;
             padding: 20px 0;
             overflow-y: auto;
+            z-index: 1000;
         }
 
             .sidebar .nav-link {
@@ -96,7 +97,7 @@
             <div class="section-title">Sistema</div>
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="Usuarios" asp-action="Index">
+                    <a class="nav-link" asp-controller="UsuariosAdmin" asp-action="Index">
                         <i class="fas fa-users"></i> Usuarios
                     </a>
                 </li>

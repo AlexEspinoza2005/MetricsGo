@@ -1,22 +1,22 @@
-﻿using InocuoGoMetrics.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using InocuoGoMetrics.Services;
 
 namespace InocuoGoMetrics.Controllers
 {
     public class TopicosController : Controller
     {
-        // Lista estática en memoria (simula la BD)
-        private static List<Topico> topicos = new List<Topico>
+        private readonly ApiService _apiService;
+
+        public TopicosController(ApiService apiService)
         {
-            new Topico { Id = 1, Titulo = "Higiene Personal", Descripcion = "Normas para el manipulador de alimentos", Icono = "fa-hands-wash" },
-            new Topico { Id = 2, Titulo = "Limpieza de Equipos", Descripcion = "Procedimientos de sanitización", Icono = "fa-spray-can" },
-            new Topico { Id = 3, Titulo = "Control de Temperatura", Descripcion = "Monitoreo térmico de alimentos", Icono = "fa-temperature-high" }
-        };
+            _apiService = apiService;
+        }
 
         // GET: Topicos
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View(topicos);
+            var topicos = await _apiService.GetAsync<List<dynamic>>("Topicos");
+            return View(topicos ?? new List<dynamic>());
         }
 
         // GET: Topicos/Create
@@ -27,60 +27,32 @@ namespace InocuoGoMetrics.Controllers
 
         // POST: Topicos/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Create(Topico topico)
+        public async Task<IActionResult> Create(dynamic topico)
         {
-            if (ModelState.IsValid)
-            {
-                topico.Id = topicos.Any() ? topicos.Max(t => t.Id) + 1 : 1;
-                topicos.Add(topico);
-                return RedirectToAction(nameof(Index));
-            }
-            return View(topico);
+            await _apiService.PostAsync<dynamic>("Topicos", topico);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Topicos/Edit/5
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(long id)
         {
-            var topico = topicos.FirstOrDefault(t => t.Id == id);
-            if (topico == null)
-                return NotFound();
-
+            var topico = await _apiService.GetAsync<dynamic>($"Topicos/{id}");
             return View(topico);
         }
 
         // POST: Topicos/Edit/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, Topico topico)
+        public async Task<IActionResult> Edit(long id, dynamic topico)
         {
-            if (id != topico.Id)
-                return NotFound();
-
-            if (ModelState.IsValid)
-            {
-                var existente = topicos.FirstOrDefault(t => t.Id == id);
-                if (existente != null)
-                {
-                    existente.Titulo = topico.Titulo;
-                    existente.Descripcion = topico.Descripcion;
-                    existente.Icono = topico.Icono;
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(topico);
+            await _apiService.PutAsync($"Topicos/{id}", topico);
+            return RedirectToAction(nameof(Index));
         }
 
         // POST: Topicos/Delete/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(long id)
         {
-            var topico = topicos.FirstOrDefault(t => t.Id == id);
-            if (topico != null)
-            {
-                topicos.Remove(topico);
-            }
+            await _apiService.DeleteAsync($"Topicos/{id}");
             return RedirectToAction(nameof(Index));
         }
     }

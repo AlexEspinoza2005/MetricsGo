@@ -7,35 +7,65 @@
     <title>Login - InocuoGo</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .login-card {
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .logo-section {
+            background: linear-gradient(180deg, #2ecc71 0%, #27ae60 100%);
+            color: white;
+            padding: 40px;
+        }
+    </style>
 </head>
-<body class="bg-light">
+<body>
     <div class="container">
         <div class="row justify-content-center align-items-center min-vh-100">
-            <div class="col-md-4">
-                <div class="card shadow">
+            <div class="col-md-5">
+                <div class="card shadow-lg login-card">
+                    <div class="logo-section text-center">
+                        <i class="fas fa-leaf fa-4x mb-3"></i>
+                        <h2 class="mb-1">InocuoGo</h2>
+                        <p class="mb-0">Sistema de Gestión</p>
+                    </div>
                     <div class="card-body p-5">
-                        <div class="text-center mb-4">
-                            <i class="fas fa-leaf fa-3x text-success"></i>
-                            <h3 class="mt-3">InocuoGo</h3>
-                            <p class="text-muted">Ingresa a tu cuenta</p>
-                        </div>
+                        <h4 class="text-center mb-4">Iniciar Sesión</h4>
+
                         @if (ViewBag.Error != null)
                         {
                             <div class="alert alert-danger">@ViewBag.Error</div>
                         }
+
                         <form asp-action="Login" method="post">
-                            <div class="mb-3">
+                            <div class="mb-4">
                                 <label class="form-label">Correo Electrónico</label>
-                                <input type="email" name="correo" class="form-control" required />
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                    <input type="email" name="login" class="form-control" placeholder="usuario@mail.com" required />
+                                </div>
                             </div>
-                            <div class="mb-3">
+                            <div class="mb-4">
                                 <label class="form-label">Contraseña</label>
-                                <input type="password" name="password" class="form-control" required />
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                    <input type="password" name="password" class="form-control" placeholder="••••••••" required />
+                                </div>
                             </div>
-                            <button type="submit" class="btn btn-success w-100">Iniciar Sesión</button>
+                            <button type="submit" class="btn btn-success w-100 py-2">
+                                <i class="fas fa-sign-in-alt"></i> Ingresar al Sistema
+                            </button>
                         </form>
-                        <div class="text-center mt-3">
-                            <a asp-action="RecuperarPassword" class="text-decoration-none">¿Olvidaste tu contraseña?</a>
+                        <div class="text-center mt-4">
+                            <a asp-action="RecuperarPassword" class="text-decoration-none text-muted">
+                                <small>¿Olvidaste tu contraseña?</small>
+                            </a>
                         </div>
                     </div>
                 </div>

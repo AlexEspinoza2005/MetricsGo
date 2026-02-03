@@ -1,4 +1,4 @@
-﻿@model InocuoGoMetrics.Models.DashboardViewModel
+﻿@model InocuoGoMetrics.ViewModels.DashboardViewModel
 @{
     ViewData["Title"] = "Dashboard";
 }
@@ -13,7 +13,7 @@
     </button>
 </div>
 
-<!-- Cards Superiores con mejor espaciado -->
+<!-- Cards Superiores -->
 <div class="row g-4 mb-5">
     <div class="col-md-6">
         <div class="card shadow-sm border-0 h-100">
@@ -23,7 +23,7 @@
                         <p class="text-muted mb-2 text-uppercase small fw-semibold">Total Conversaciones</p>
                         <h1 class="display-4 fw-bold mb-0">@Model.TotalConversaciones</h1>
                         <small class="text-success">
-                            <i class="fas fa-arrow-up"></i> +12% vs mes anterior
+                            <i class="fas fa-arrow-up"></i> Activas
                         </small>
                     </div>
                     <div class="text-primary" style="font-size: 3rem; opacity: 0.15;">
@@ -42,7 +42,7 @@
                         <p class="text-muted mb-2 text-uppercase small fw-semibold">Usuarios Únicos</p>
                         <h1 class="display-4 fw-bold mb-0">@Model.UsuariosUnicos</h1>
                         <small class="text-success">
-                            <i class="fas fa-arrow-up"></i> +8% vs mes anterior
+                            <i class="fas fa-arrow-up"></i> Registrados
                         </small>
                     </div>
                     <div class="text-success" style="font-size: 3rem; opacity: 0.15;">
@@ -54,7 +54,7 @@
     </div>
 </div>
 
-<!-- Gráfico con mejor diseño -->
+<!-- Gráfico -->
 <div class="card shadow-sm border-0">
     <div class="card-body p-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -76,10 +76,11 @@
                     @{
                         var colores = new[] { "primary", "success", "warning", "info", "secondary" };
                         var index = 0;
+                        var total = Model.TemasRecurrentes.Values.Sum();
                     }
                     @foreach (var tema in Model.TemasRecurrentes)
                     {
-                        var porcentaje = (tema.Value * 100.0 / Model.TemasRecurrentes.Values.Sum());
+                        var porcentaje = (tema.Value * 100.0 / total);
                         <div class="list-group-item border-0 px-0">
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <div class="d-flex align-items-center">
@@ -107,15 +108,15 @@
         new Chart(ctx, {
             type: 'doughnut',
             data: {
-                labels: @Html.Raw(Json.Serialize(Model.TemasRecurrentes.Keys)),
+                labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.TemasRecurrentes.Keys)),
                 datasets: [{
-                    data: @Html.Raw(Json.Serialize(Model.TemasRecurrentes.Values)),
+                    data: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.TemasRecurrentes.Values)),
                     backgroundColor: [
-                        '#0d6efd',  // primary
-                        '#198754',  // success
-                        '#ffc107',  // warning
-                        '#0dcaf0',  // info
-                        '#6c757d'   // secondary
+                        '#0d6efd',
+                        '#198754',
+                        '#ffc107',
+                        '#0dcaf0',
+                        '#6c757d'
                     ],
                     borderWidth: 0,
                     hoverOffset: 10
@@ -132,14 +133,7 @@
                     tooltip: {
                         backgroundColor: 'rgba(0,0,0,0.8)',
                         padding: 12,
-                        cornerRadius: 8,
-                        callbacks: {
-                            label: function(context) {
-                                let total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                let percentage = ((context.parsed / total) * 100).toFixed(1);
-                                return context.label + ': ' + percentage + '%';
-                            }
-                        }
+                        cornerRadius: 8
                     }
                 }
             }
