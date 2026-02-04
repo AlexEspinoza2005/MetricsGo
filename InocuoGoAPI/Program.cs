@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using InocuoGoMetrics.API.Data;
-using System.Text.Json.Serialization; // ? AGREGAR ESTO
+using System.Text.Json.Serialization; 
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,11 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
-        // ? IGNORAR CICLOS DE REFERENCIA
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 
-        // ? OPCIONAL: Nombres en camelCase
-        options.JsonSerializerOptions.PropertyNamingPolicy = null; // Mantener nombres originales
+        options.JsonSerializerOptions.PropertyNamingPolicy = null; 
     });
 
 // Configurar PostgreSQL con Neon

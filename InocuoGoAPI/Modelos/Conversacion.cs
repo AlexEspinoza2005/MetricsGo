@@ -20,7 +20,7 @@ namespace InocuoGoMetrics.API.Models
 
         [Required]
         [Column("estadocon")]
-        public string EstadoCon { get; set; } = "abierta"; // 'abierta' o 'cerrada'
+        public string EstadoCon { get; set; } = "abierta"; 
 
         [Column("iniciocon")]
         public DateTime Iniciocon { get; set; } = DateTime.UtcNow;

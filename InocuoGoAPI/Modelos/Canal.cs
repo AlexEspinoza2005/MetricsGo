@@ -9,7 +9,7 @@ namespace InocuoGoMetrics.API.Models
         [Key]
         [Column("idcan")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public short IdCan { get; set; } // SMALLSERIAL
+        public short IdCan { get; set; } 
 
         [Required]
         [Column("nombrecan")]

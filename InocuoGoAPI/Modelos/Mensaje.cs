@@ -9,7 +9,7 @@ namespace InocuoGoMetrics.API.Models
         [Key]
         [Column("idmen")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long IdMen { get; set; } // BIGSERIAL
+        public long IdMen { get; set; }
 
         [Required]
         [Column("idcon_men")]
@@ -17,7 +17,7 @@ namespace InocuoGoMetrics.API.Models
 
         [Required]
         [Column("direccionmen")]
-        public string DireccionMen { get; set; } = string.Empty; // 'entrada' o 'salida'
+        public string DireccionMen { get; set; } = string.Empty; 
 
         [Required]
         [Column("tipomen")]

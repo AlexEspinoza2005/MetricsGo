@@ -28,7 +28,7 @@ namespace InocuoGoMetrics.API.Controllers
 
         // GET: api/UsuariosAdmin/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<UsuarioAdmin>> GetUsuarioAdmin(Guid id)  // ✅ CAMBIO: int → Guid
+        public async Task<ActionResult<UsuarioAdmin>> GetUsuarioAdmin(Guid id)  
         {
             var usuario = await _context.UsuariosAdmin
                 .Include(u => u.Organizacion)
@@ -44,9 +44,8 @@ namespace InocuoGoMetrics.API.Controllers
 
         // POST: api/UsuariosAdmin/login
         [HttpPost("login")]
-        public async Task<ActionResult> Login([FromBody] LoginRequestDto request)  // ✅ CAMBIO: usa DTO del archivo
+        public async Task<ActionResult> Login([FromBody] LoginRequestDto request)  
         {
-            // Login es el correo según tu DTO
             var usuario = await _context.UsuariosAdmin
                 .FirstOrDefaultAsync(u => u.CorreoAdm == request.Login && u.PasswAdm == request.Password);
 
@@ -70,7 +69,7 @@ namespace InocuoGoMetrics.API.Controllers
 
         // POST: api/UsuariosAdmin
         [HttpPost]
-        public async Task<ActionResult<UsuarioAdmin>> PostUsuarioAdmin(UsuarioAdminCreateDto dto)  // ✅ CAMBIO: usa DTO
+        public async Task<ActionResult<UsuarioAdmin>> PostUsuarioAdmin(UsuarioAdminCreateDto dto) 
         {
             // Verificar que el correo no exista
             if (await _context.UsuariosAdmin.AnyAsync(u => u.CorreoAdm == dto.CorreoAdm))
@@ -83,7 +82,7 @@ namespace InocuoGoMetrics.API.Controllers
                 NombreAdm = dto.NombreAdm,
                 CorreoAdm = dto.CorreoAdm,
                 IdOrgAdm = dto.IdOrgAdm,
-                PasswAdm = dto.PassAdm,  // TODO: Hash password en producción
+                PasswAdm = dto.PassAdm,  
                 CreadoAdm = DateTime.UtcNow
             };
 
@@ -95,7 +94,7 @@ namespace InocuoGoMetrics.API.Controllers
 
         // PUT: api/UsuariosAdmin/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUsuarioAdmin(Guid id, UsuarioAdminUpdateDto dto)  // ✅ CAMBIO: Guid, usa DTO
+        public async Task<IActionResult> PutUsuarioAdmin(Guid id, UsuarioAdminUpdateDto dto)  
         {
             var usuario = await _context.UsuariosAdmin.FindAsync(id);
             if (usuario == null)
@@ -103,7 +102,6 @@ namespace InocuoGoMetrics.API.Controllers
                 return NotFound();
             }
 
-            // Verificar que el correo no esté en uso por otro usuario
             if (await _context.UsuariosAdmin.AnyAsync(u => u.CorreoAdm == dto.CorreoAdm && u.IdAdm != id))
             {
                 return BadRequest(new { message = "El correo ya está en uso" });
@@ -113,10 +111,9 @@ namespace InocuoGoMetrics.API.Controllers
             usuario.CorreoAdm = dto.CorreoAdm;
             usuario.IdOrgAdm = dto.IdOrgAdm;
 
-            // Solo actualizar contraseña si se proporciona
             if (!string.IsNullOrEmpty(dto.PassAdm))
             {
-                usuario.PasswAdm = dto.PassAdm;  // TODO: Hash password en producción
+                usuario.PasswAdm = dto.PassAdm;  
             }
 
             try
@@ -140,7 +137,7 @@ namespace InocuoGoMetrics.API.Controllers
 
         // DELETE: api/UsuariosAdmin/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUsuarioAdmin(Guid id)  // ✅ CAMBIO: int → Guid
+        public async Task<IActionResult> DeleteUsuarioAdmin(Guid id)  
         {
             var usuario = await _context.UsuariosAdmin.FindAsync(id);
             if (usuario == null)
@@ -154,7 +151,7 @@ namespace InocuoGoMetrics.API.Controllers
             return NoContent();
         }
 
-        private bool UsuarioAdminExists(Guid id)  // ✅ CAMBIO: int → Guid
+        private bool UsuarioAdminExists(Guid id)  
         {
             return _context.UsuariosAdmin.Any(e => e.IdAdm == id);
         }

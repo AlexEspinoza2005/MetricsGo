@@ -52,16 +52,16 @@ namespace InocuoGoMetrics.Controllers
             await _apiService.DeleteAsync($"Topicos/{id}");
             return RedirectToAction(nameof(Index));
         }
+
     }
 
-    // CLASE MODELO: Esto es lo que soluciona el error
     public class TopicoResponse
     {
         public long idTem { get; set; }
         public string nombreTem { get; set; }
         public string descriTem { get; set; }
         public DateTime creadoTem { get; set; }
-        public string idOrgTem { get; set; } // UUID de la organización
-        public bool activoTem { get; set; }   // Para el switch/checkbox
+        public string idOrgTem { get; set; } 
+        public bool activoTem { get; set; }   
     }
 }

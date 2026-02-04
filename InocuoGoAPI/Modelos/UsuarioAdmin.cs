@@ -30,12 +30,11 @@ namespace InocuoGoMetrics.API.Models
         public string PasswAdm { get; set; } = string.Empty;
 
         [Column("logintadm")]
-        public DateTime? LogintAdm { get; set; } // Timestamp del último login
+        public DateTime? LogintAdm { get; set; } 
 
         [Column("creadoadm")]
         public DateTime CreadoAdm { get; set; } = DateTime.UtcNow;
 
-        // Relaciones
         [ForeignKey("IdOrgAdm")]
         public Organizacion? Organizacion { get; set; }
     }

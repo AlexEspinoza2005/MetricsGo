@@ -42,7 +42,7 @@ namespace InocuoGoMetrics.Controllers
         }
 
         // GET: UsuariosAdmin/Edit/uuid
-        public async Task<IActionResult> Edit(string id) // Cambiado a string por el UUID
+        public async Task<IActionResult> Edit(string id) 
         {
             var usuario = await _apiService.GetAsync<UsuarioAdminResponse>($"UsuariosAdmin/{id}");
             return View(usuario);
@@ -64,21 +64,21 @@ namespace InocuoGoMetrics.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(string id) // Cambiado a string
+        public async Task<IActionResult> Delete(string id) 
         {
             await _apiService.DeleteAsync($"UsuariosAdmin/{id}");
             return RedirectToAction(nameof(Index));
         }
+
     }
 
-    // MODELOS PARA USUARIOS
     public class UsuarioAdminResponse
     {
-        public string idAdm { get; set; } // UUID de la DB
+        public string idAdm { get; set; } 
         public string nombreAdm { get; set; }
         public string correoAdm { get; set; }
         public string passAdm { get; set; }
-        public string idOrgAdm { get; set; } // UUID de la DB
+        public string idOrgAdm { get; set; } 
         public DateTime creadoAdm { get; set; }
         public OrganizacionResponse organizacion { get; set; }
     }

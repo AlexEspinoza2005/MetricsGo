@@ -30,7 +30,7 @@ namespace InocuoGoMetrics.API.Controllers
 
         // GET: api/Topicos/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Topico>> GetTopico(long id)  // ✅ CAMBIO: int → long
+        public async Task<ActionResult<Topico>> GetTopico(long id)  
         {
             var topico = await _context.Topicos
                 .Include(t => t.Subcategorias)
@@ -47,13 +47,13 @@ namespace InocuoGoMetrics.API.Controllers
 
         // POST: api/Topicos
         [HttpPost]
-        public async Task<ActionResult<Topico>> PostTopico(TopicoCreateDto dto)  // ✅ CAMBIO: usa DTO
+        public async Task<ActionResult<Topico>> PostTopico(TopicoCreateDto dto)  
         {
             var topico = new Topico
             {
                 NombreTem = dto.NombreTem,
                 DescriTem = dto.DescriTem,
-                IdOrgTem = dto.IdOrgTem,  // ✅ NUEVO: requiere organización
+                IdOrgTem = dto.IdOrgTem, 
                 ActivoTem = true,
                 CreadoTem = DateTime.UtcNow
             };
@@ -66,7 +66,7 @@ namespace InocuoGoMetrics.API.Controllers
 
         // PUT: api/Topicos/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTopico(long id, TopicoUpdateDto dto)  // ✅ CAMBIO: int → long, usa DTO
+        public async Task<IActionResult> PutTopico(long id, TopicoUpdateDto dto)  
         {
             var topico = await _context.Topicos.FindAsync(id);
             if (topico == null)
@@ -100,7 +100,7 @@ namespace InocuoGoMetrics.API.Controllers
 
         // DELETE: api/Topicos/5 (Soft delete)
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTopico(long id)  // ✅ CAMBIO: int → long
+        public async Task<IActionResult> DeleteTopico(long id) 
         {
             var topico = await _context.Topicos.FindAsync(id);
             if (topico == null)
@@ -115,7 +115,7 @@ namespace InocuoGoMetrics.API.Controllers
             return NoContent();
         }
 
-        private bool TopicoExists(long id)  // ✅ CAMBIO: int → long
+        private bool TopicoExists(long id)  
         {
             return _context.Topicos.Any(e => e.IdTem == id);
         }

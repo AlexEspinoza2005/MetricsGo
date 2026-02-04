@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-// DTOs/SubcategoriaDto.cs
 namespace InocuoGoMetrics.API.DTOs
 {
     public class SubcategoriaCreateDto
@@ -12,7 +11,7 @@ namespace InocuoGoMetrics.API.DTOs
         public string? DescriSub { get; set; }
 
         [Required]
-        public long IdTemSub { get; set; }  // ✅ long
+        public long IdTemSub { get; set; } 
     }
 
     public class SubcategoriaUpdateDto
@@ -25,7 +24,7 @@ namespace InocuoGoMetrics.API.DTOs
         public string? DescriSub { get; set; }
 
         [Required]
-        public long IdTemSub { get; set; }  // ✅ long
+        public long IdTemSub { get; set; } 
 
         public bool ActivoSub { get; set; }
     }

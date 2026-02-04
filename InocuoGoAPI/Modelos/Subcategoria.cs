@@ -9,7 +9,7 @@ namespace InocuoGoMetrics.API.Models
         [Key]
         [Column("idsub")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long IdSub { get; set; } // BIGSERIAL
+        public long IdSub { get; set; } 
 
         [Required]
         [Column("idtem_sub")]

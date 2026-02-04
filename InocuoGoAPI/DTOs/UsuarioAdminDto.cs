@@ -1,5 +1,4 @@
-﻿// DTOs/UsuarioAdminDto.cs
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace InocuoGoMetrics.API.DTOs
 {
@@ -14,7 +13,7 @@ namespace InocuoGoMetrics.API.DTOs
         public string CorreoAdm { get; set; } = string.Empty;
 
         [Required]
-        public Guid IdOrgAdm { get; set; }  // ✅ Guid
+        public Guid IdOrgAdm { get; set; } 
 
         [Required]
         [StringLength(100)]
@@ -32,7 +31,7 @@ namespace InocuoGoMetrics.API.DTOs
         public string CorreoAdm { get; set; } = string.Empty;
 
         [Required]
-        public Guid IdOrgAdm { get; set; }  // ✅ Guid
+        public Guid IdOrgAdm { get; set; }  
 
         [StringLength(100)]
         public string? PassAdm { get; set; }

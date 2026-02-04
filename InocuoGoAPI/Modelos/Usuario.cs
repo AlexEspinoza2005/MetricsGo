@@ -9,7 +9,7 @@ namespace InocuoGoMetrics.API.Models
         [Key]
         [Column("idusu")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long IdUsu { get; set; } // BIGSERIAL
+        public long IdUsu { get; set; } 
 
         [Required]
         [Column("idorg_usu")]
@@ -21,7 +21,7 @@ namespace InocuoGoMetrics.API.Models
 
         [Required]
         [Column("idcanalusu")]
-        public string IdCanalUsu { get; set; } = string.Empty; // ID del canal externo (ej: número WhatsApp)
+        public string IdCanalUsu { get; set; } = string.Empty; 
 
         [Column("nombreusu")]
         public string? NombreUsu { get; set; }

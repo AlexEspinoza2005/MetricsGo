@@ -1,7 +1,5 @@
-﻿// DTOs/TopicoDto.cs
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-// DTOs/TopicoDto.cs
 namespace InocuoGoMetrics.API.DTOs
 {
     public class TopicoCreateDto
@@ -14,7 +12,7 @@ namespace InocuoGoMetrics.API.DTOs
         public string? DescriTem { get; set; }
 
         [Required]
-        public Guid IdOrgTem { get; set; }  // ✅ Guid
+        public Guid IdOrgTem { get; set; }  
     }
 
     public class TopicoUpdateDto
@@ -27,7 +25,7 @@ namespace InocuoGoMetrics.API.DTOs
         public string? DescriTem { get; set; }
 
         [Required]
-        public Guid IdOrgTem { get; set; }  // ✅ Guid
+        public Guid IdOrgTem { get; set; }  
 
         public bool ActivoTem { get; set; }
     }

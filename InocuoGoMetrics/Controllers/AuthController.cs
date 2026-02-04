@@ -70,7 +70,6 @@ namespace InocuoGoMetrics.Controllers
     }
     public class LoginResponse
     {
-        // Cambiamos a string porque la API envía un UUID
         public string idAdm { get; set; }
         public string nombreAdm { get; set; }
         public string correoAdm { get; set; }

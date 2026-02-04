@@ -1,57 +1,363 @@
 ﻿@model InocuoGoMetrics.Controllers.TopicoResponse
-
 @{
     ViewData["Title"] = "Editar Tópico";
 }
 
 <div class="mb-4">
     <h2>Editar Tópico</h2>
-    <p class="text-muted">Modifica la información del tópico seleccionado</p>
+    <p class="text-muted">Modifica la información del tópico y gestiona sus subcategorías</p>
 </div>
 
-<div class="card shadow-sm" style="max-width: 800px;">
-    <div class="card-body p-4">
-        <form asp-action="Edit" asp-route-id="@Model.idTem" method="post">
-            <div class="mb-3">
-                <label class="form-label">ID del Tópico</label>
-                <input type="text" class="form-control" value="@Model.idTem" readonly style="background-color: #e9ecef;" />
+<div class="row">
+    <!-- Columna Izquierda: Formulario del Tópico -->
+    <div class="col-md-7">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h5 class="mb-3">Información del Tópico</h5>
+                <form asp-action="Edit" asp-route-id="@Model.idTem" method="post">
+                    <input type="hidden" name="idOrgTem" value="@Model.idOrgTem" />
+
+                    <div class="mb-3">
+                        <label class="form-label">ID del Tópico</label>
+                        <input type="text" class="form-control" value="@Model.idTem" readonly style="background-color: #e9ecef;" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Título del Tópico</label>
+                        <input type="text" name="nombreTem" class="form-control" value="@Model.nombreTem" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Descripción</label>
+                        <textarea name="descriTem" class="form-control" rows="4" required>@Model.descriTem</textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" name="activoTem" id="activoTem" @(Model.activoTem ? "checked" : "") />
+                            <label class="form-check-label" for="activoTem">
+                                <strong>Tópico Activo</strong>
+                            </label>
+                        </div>
+                        <small class="text-muted">Los tópicos inactivos no aparecerán en el asistente</small>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> Actualizar Tópico
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Volver
+                        </a>
+                    </div>
+                </form>
             </div>
+        </div>
+    </div>
 
-            <div class="mb-3">
-                <label class="form-label">Título del Tópico</label>
-                <input type="text" name="nombreTem" class="form-control" value="@Model.nombreTem" required />
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Descripción</label>
-                <textarea name="descriTem" class="form-control" rows="4" required>@Model.descriTem</textarea>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Organización (UUID)</label>
-                <input type="text" name="idOrgTem" class="form-control" value="@Model.idOrgTem" readonly style="background-color: #e9ecef;" />
-            </div>
-
-            <div class="mb-3">
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" name="activoTem" id="activoTem" @(Model.activoTem ? "checked" : "") />
-                    <label class="form-check-label" for="activoTem">
-                        Tópico Activo
-                    </label>
-                </div>
-                <small class="text-muted">Los tópicos inactivos no aparecerán en el asistente</small>
-            </div>
-
-            <hr class="my-4">
-
-            <div class="d-flex gap-2">
-                <button type="submit" class="btn btn-success">
-                    <i class="fas fa-save"></i> Actualizar Tópico
+    <!-- Columna Derecha: Subcategorías -->
+    <div class="col-md-5">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h6 class="mb-0">
+                    <i class="fas fa-list"></i> Subcategorías
+                </h6>
+                <button class="btn btn-sm btn-light" onclick="abrirModalCrearSubcategoria()">
+                    <i class="fas fa-plus"></i> Nueva
                 </button>
-                <a asp-action="Index" class="btn btn-secondary">
-                    <i class="fas fa-times"></i> Cancelar
-                </a>
             </div>
-        </form>
+            <div class="card-body p-0">
+                <div id="listaSubcategorias" class="list-group list-group-flush">
+                    <!-- Se llenan dinámicamente -->
+                </div>
+                <div id="noSubcategorias" class="p-4 text-center text-muted" style="display: none;">
+                    <i class="fas fa-inbox fa-2x mb-2"></i>
+                    <p class="mb-0">No hay subcategorías</p>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+<!-- Modal: Crear Subcategoría -->
+<div class="modal fade" id="modalCrearSubcategoria" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-plus"></i> Nueva Subcategoría
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formCrearSubcategoria">
+                    <div class="mb-3">
+                        <label class="form-label">Nombre</label>
+                        <input type="text" id="nombreSub" class="form-control" placeholder="Ej: Lavado de Manos" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Descripción</label>
+                        <textarea id="descriSub" class="form-control" rows="3" placeholder="Describe la subcategoría..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success" onclick="crearSubcategoria()">
+                    <i class="fas fa-save"></i> Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Editar Subcategoría -->
+<div class="modal fade" id="modalEditarSubcategoria" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-dark">
+                <h5 class="modal-title">
+                    <i class="fas fa-edit"></i> Editar Subcategoría
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formEditarSubcategoria">
+                    <input type="hidden" id="editIdSub" />
+                    <div class="mb-3">
+                        <label class="form-label">Nombre</label>
+                        <input type="text" id="editNombreSub" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Descripción</label>
+                        <textarea id="editDescriSub" class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="editActivoSub" />
+                            <label class="form-check-label" for="editActivoSub">
+                                Subcategoría Activa
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-warning" onclick="actualizarSubcategoria()">
+                    <i class="fas fa-save"></i> Actualizar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Eliminar Subcategoría -->
+<div class="modal fade" id="modalEliminarSubcategoria" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-exclamation-triangle"></i> Confirmar Eliminación
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Estás seguro de eliminar esta subcategoría?</p>
+                <p class="text-muted mb-0">Esta acción no se puede deshacer.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">
+                    <i class="fas fa-trash"></i> Eliminar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const topicoId = @Model.idTem;
+        let subcategoriaIdEliminar = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            cargarSubcategorias();
+        });
+
+        async function cargarSubcategorias() {
+            try {
+                const response = await fetch(`/Subcategorias/GetByTopico/${topicoId}`);
+                const subcategorias = await response.json();
+
+                const lista = document.getElementById('listaSubcategorias');
+                const noSubs = document.getElementById('noSubcategorias');
+
+                if (subcategorias && subcategorias.length > 0) {
+                    lista.innerHTML = '';
+                    noSubs.style.display = 'none';
+
+                    subcategorias.forEach(sub => {
+                        const item = document.createElement('div');
+                        item.className = 'list-group-item d-flex justify-content-between align-items-start';
+                        item.innerHTML = `
+                            <div class="flex-grow-1">
+                                <div class="d-flex align-items-center mb-1">
+                                    <span class="badge bg-secondary me-2">#${sub.idSub}</span>
+                                    <strong>${sub.nombreSub}</strong>
+                                    ${!sub.activoSub ? '<span class="badge bg-danger ms-2">Inactiva</span>' : ''}
+                                </div>
+                                <p class="mb-0 text-muted small">${sub.descriSub || 'Sin descripción'}</p>
+                            </div>
+                            <div class="btn-group">
+                                <button class="btn btn-sm btn-outline-warning" onclick='abrirModalEditarSubcategoria(${JSON.stringify(sub)})' title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="confirmarEliminarSubcategoria(${sub.idSub})" title="Eliminar">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        `;
+                        lista.appendChild(item);
+                    });
+                } else {
+                    lista.innerHTML = '';
+                    noSubs.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error al cargar subcategorías:', error);
+            }
+        }
+
+        function abrirModalCrearSubcategoria() {
+            document.getElementById('nombreSub').value = '';
+            document.getElementById('descriSub').value = '';
+            new bootstrap.Modal(document.getElementById('modalCrearSubcategoria')).show();
+        }
+
+        async function crearSubcategoria() {
+            const nombre = document.getElementById('nombreSub').value.trim();
+            const descripcion = document.getElementById('descriSub').value.trim();
+
+            if (!nombre) {
+                alert('El nombre es obligatorio');
+                return;
+            }
+
+            try {
+                const response = await fetch('/Subcategorias/Create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        nombreSub: nombre,
+                        descriSub: descripcion,
+                        idTemSub: topicoId
+                    })
+                });
+
+                if (response.ok) {
+                    bootstrap.Modal.getInstance(document.getElementById('modalCrearSubcategoria')).hide();
+                    cargarSubcategorias();
+                    mostrarAlerta('Subcategoría creada exitosamente', 'success');
+                } else {
+                    alert('Error al crear la subcategoría');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al crear la subcategoría');
+            }
+        }
+
+        function abrirModalEditarSubcategoria(sub) {
+            document.getElementById('editIdSub').value = sub.idSub;
+            document.getElementById('editNombreSub').value = sub.nombreSub;
+            document.getElementById('editDescriSub').value = sub.descriSub || '';
+            document.getElementById('editActivoSub').checked = sub.activoSub;
+            new bootstrap.Modal(document.getElementById('modalEditarSubcategoria')).show();
+        }
+
+        async function actualizarSubcategoria() {
+            const id = document.getElementById('editIdSub').value;
+            const nombre = document.getElementById('editNombreSub').value.trim();
+            const descripcion = document.getElementById('editDescriSub').value.trim();
+            const activo = document.getElementById('editActivoSub').checked;
+
+            if (!nombre) {
+                alert('El nombre es obligatorio');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/Subcategorias/Edit/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        nombreSub: nombre,
+                        descriSub: descripcion,
+                        idTemSub: topicoId,
+                        activoSub: activo
+                    })
+                });
+
+                if (response.ok) {
+                    bootstrap.Modal.getInstance(document.getElementById('modalEditarSubcategoria')).hide();
+                    cargarSubcategorias();
+                    mostrarAlerta('Subcategoría actualizada exitosamente', 'success');
+                } else {
+                    alert('Error al actualizar la subcategoría');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al actualizar la subcategoría');
+            }
+        }
+
+        function confirmarEliminarSubcategoria(id) {
+            subcategoriaIdEliminar = id;
+            const modal = new bootstrap.Modal(document.getElementById('modalEliminarSubcategoria'));
+
+            document.getElementById('btnConfirmarEliminar').onclick = function() {
+                eliminarSubcategoria(id);
+            };
+
+            modal.show();
+        }
+
+        async function eliminarSubcategoria(id) {
+            try {
+                const response = await fetch(`/Subcategorias/Delete/${id}`, {
+                    method: 'POST'
+                });
+
+                if (response.ok) {
+                    bootstrap.Modal.getInstance(document.getElementById('modalEliminarSubcategoria')).hide();
+                    cargarSubcategorias();
+                    mostrarAlerta('Subcategoría eliminada', 'info');
+                } else {
+                    alert('Error al eliminar la subcategoría');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al eliminar la subcategoría');
+            }
+        }
+
+        function mostrarAlerta(mensaje, tipo) {
+            const iconos = {
+                success: 'check-circle',
+                info: 'info-circle',
+                warning: 'exclamation-triangle',
+                danger: 'times-circle'
+            };
+
+            const alerta = document.createElement('div');
+            alerta.className = `alert alert-${tipo} alert-dismissible fade show position-fixed top-0 end-0 m-3`;
+            alerta.style.zIndex = '9999';
+            alerta.innerHTML = `<i class="fas fa-${iconos[tipo]}"></i> ${mensaje} <button type="button" class="btn-close" data-bs-dismiss="alert"></button>`;
+            document.body.appendChild(alerta);
+            setTimeout(() => alerta.remove(), 3000);
+        }
+    </script>
+}

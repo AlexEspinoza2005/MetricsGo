@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using InocuoGoMetrics.Services;
 using InocuoGoMetrics.ViewModels;
+using ClosedXML.Excel;
 
 namespace InocuoGoMetrics.Controllers
 {
@@ -22,14 +23,11 @@ namespace InocuoGoMetrics.Controllers
         // GET: Home/EditarPerfil
         public async Task<IActionResult> EditarPerfil()
         {
-            // Obtener el ID del usuario logueado desde la sesión
             var usuarioId = HttpContext.Session.GetString("UsuarioId");
-
             if (string.IsNullOrEmpty(usuarioId))
             {
                 return RedirectToAction("Login", "Auth");
             }
-
             var usuario = await _apiService.GetAsync<dynamic>($"UsuariosAdmin/{usuarioId}");
             return View(usuario);
         }
@@ -39,22 +37,18 @@ namespace InocuoGoMetrics.Controllers
         public async Task<IActionResult> EditarPerfil(Guid id, string nombreAdm, string correoAdm, string passwAdm)
         {
             var usuarioId = HttpContext.Session.GetString("UsuarioId");
-
             if (string.IsNullOrEmpty(usuarioId))
             {
                 return RedirectToAction("Login", "Auth");
             }
-
             var data = new
             {
                 nombreAdm,
                 correoAdm,
                 passwAdm,
-                idOrgAdm = HttpContext.Session.GetString("OrgId") // Necesitarás guardar esto en el login
+                idOrgAdm = HttpContext.Session.GetString("OrgId")
             };
-
             await _apiService.PutAsync($"UsuariosAdmin/{usuarioId}", data);
-
             ViewBag.Success = "Perfil actualizado correctamente";
             return RedirectToAction("Index");
         }
