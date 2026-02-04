@@ -15,8 +15,8 @@ namespace InocuoGoMetrics.Controllers
         // GET: UsuariosAdmin
         public async Task<IActionResult> Index()
         {
-            var usuarios = await _apiService.GetAsync<List<dynamic>>("UsuariosAdmin");
-            return View(usuarios ?? new List<dynamic>());
+            var usuarios = await _apiService.GetAsync<List<UsuarioAdminResponse>>("UsuariosAdmin");
+            return View(usuarios ?? new List<UsuarioAdminResponse>());
         }
 
         // GET: UsuariosAdmin/Create
@@ -25,35 +25,67 @@ namespace InocuoGoMetrics.Controllers
             return View();
         }
 
-        // POST: UsuariosAdmin/Create
         [HttpPost]
-        public async Task<IActionResult> Create(dynamic usuario)
+        public async Task<IActionResult> Create(UsuarioAdminResponse usuario)
         {
-            await _apiService.PostAsync<dynamic>("UsuariosAdmin", usuario);
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                usuario.creadoAdm = DateTime.Now;
+                await _apiService.PostAsync<UsuarioAdminResponse>("UsuariosAdmin", usuario);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = "Error al crear: " + ex.Message;
+                return View(usuario);
+            }
         }
 
-        // GET: UsuariosAdmin/Edit/5
-        public async Task<IActionResult> Edit(Guid id)
+        // GET: UsuariosAdmin/Edit/uuid
+        public async Task<IActionResult> Edit(string id) // Cambiado a string por el UUID
         {
-            var usuario = await _apiService.GetAsync<dynamic>($"UsuariosAdmin/{id}");
+            var usuario = await _apiService.GetAsync<UsuarioAdminResponse>($"UsuariosAdmin/{id}");
             return View(usuario);
         }
 
-        // POST: UsuariosAdmin/Edit/5
         [HttpPost]
-        public async Task<IActionResult> Edit(Guid id, dynamic usuario)
+        public async Task<IActionResult> Edit(string id, UsuarioAdminResponse usuario)
         {
-            await _apiService.PutAsync($"UsuariosAdmin/{id}", usuario);
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await _apiService.PutAsync($"UsuariosAdmin/{id}", usuario);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = "Error al actualizar: " + ex.Message;
+                return View(usuario);
+            }
         }
 
-        // POST: UsuariosAdmin/Delete/5
         [HttpPost]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(string id) // Cambiado a string
         {
             await _apiService.DeleteAsync($"UsuariosAdmin/{id}");
             return RedirectToAction(nameof(Index));
         }
+    }
+
+    // MODELOS PARA USUARIOS
+    public class UsuarioAdminResponse
+    {
+        public string idAdm { get; set; } // UUID de la DB
+        public string nombreAdm { get; set; }
+        public string correoAdm { get; set; }
+        public string passAdm { get; set; }
+        public string idOrgAdm { get; set; } // UUID de la DB
+        public DateTime creadoAdm { get; set; }
+        public OrganizacionResponse organizacion { get; set; }
+    }
+
+    public class OrganizacionResponse
+    {
+        public string idOrg { get; set; }
+        public string nombreOrg { get; set; }
     }
 }

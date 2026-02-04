@@ -15,8 +15,9 @@ namespace InocuoGoMetrics.Controllers
         // GET: Topicos
         public async Task<IActionResult> Index()
         {
-            var topicos = await _apiService.GetAsync<List<dynamic>>("Topicos");
-            return View(topicos ?? new List<dynamic>());
+            // CAMBIO: Usamos List<TopicoResponse> en lugar de List<dynamic>
+            var topicos = await _apiService.GetAsync<List<TopicoResponse>>("Topicos");
+            return View(topicos ?? new List<TopicoResponse>());
         }
 
         // GET: Topicos/Create
@@ -25,35 +26,42 @@ namespace InocuoGoMetrics.Controllers
             return View();
         }
 
-        // POST: Topicos/Create
         [HttpPost]
-        public async Task<IActionResult> Create(dynamic topico)
+        public async Task<IActionResult> Create(TopicoResponse topico)
         {
-            await _apiService.PostAsync<dynamic>("Topicos", topico);
+            await _apiService.PostAsync<TopicoResponse>("Topicos", topico);
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Topicos/Edit/5
         public async Task<IActionResult> Edit(long id)
         {
-            var topico = await _apiService.GetAsync<dynamic>($"Topicos/{id}");
+            var topico = await _apiService.GetAsync<TopicoResponse>($"Topicos/{id}");
             return View(topico);
         }
 
-        // POST: Topicos/Edit/5
         [HttpPost]
-        public async Task<IActionResult> Edit(long id, dynamic topico)
+        public async Task<IActionResult> Edit(long id, TopicoResponse topico)
         {
             await _apiService.PutAsync($"Topicos/{id}", topico);
             return RedirectToAction(nameof(Index));
         }
 
-        // POST: Topicos/Delete/5
         [HttpPost]
         public async Task<IActionResult> Delete(long id)
         {
             await _apiService.DeleteAsync($"Topicos/{id}");
             return RedirectToAction(nameof(Index));
         }
+    }
+
+    // CLASE MODELO: Esto es lo que soluciona el error
+    public class TopicoResponse
+    {
+        public long idTem { get; set; }
+        public string nombreTem { get; set; }
+        public string descriTem { get; set; }
+        public DateTime creadoTem { get; set; }
+        public string idOrgTem { get; set; } // UUID de la organización
+        public bool activoTem { get; set; }   // Para el switch/checkbox
     }
 }

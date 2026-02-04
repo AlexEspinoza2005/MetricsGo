@@ -1,4 +1,4 @@
-﻿@model List<dynamic>
+﻿@model IEnumerable<InocuoGoMetrics.Controllers.UsuarioAdminResponse>
 @{
     ViewData["Title"] = "Usuarios Administradores";
 }
@@ -15,8 +15,7 @@
 
 <div class="card shadow-sm">
     <div class="card-body">
-        @if (Model != null && Model.Count > 0)
-        {
+@if (Model != null && Model.Any())        {
             <div class="table-responsive">
                 <table class="table table-hover align-middle">
                     <thead class="table-light">

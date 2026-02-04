@@ -25,15 +25,16 @@ namespace InocuoGoMetrics.Controllers
             try
             {
                 var loginData = new { login, password };
-                var response = await _apiService.PostAsync<Dictionary<string, object>>("UsuariosAdmin/login", loginData);
+                // Cambiamos Dictionary por LoginResponse
+                var response = await _apiService.PostAsync<LoginResponse>("UsuariosAdmin/login", loginData);
 
                 if (response != null)
                 {
-                    // Guardar en sesión - Acceso correcto a propiedades dinámicas
-                    HttpContext.Session.SetString("UsuarioId", response["idAdm"].ToString());
-                    HttpContext.Session.SetString("UsuarioNombre", response["nombreAdm"].ToString());
-                    HttpContext.Session.SetString("UsuarioCorreo", response["correoAdm"].ToString());
-                    HttpContext.Session.SetString("OrgId", response["idOrgAdm"].ToString());
+                    // Ahora el acceso es directo y seguro
+                    HttpContext.Session.SetString("UsuarioId", response.idAdm.ToString());
+                    HttpContext.Session.SetString("UsuarioNombre", response.nombreAdm);
+                    HttpContext.Session.SetString("UsuarioCorreo", response.correoAdm);
+                    HttpContext.Session.SetString("OrgId", response.idOrgAdm.ToString());
 
                     return RedirectToAction("Index", "Home");
                 }
@@ -66,5 +67,13 @@ namespace InocuoGoMetrics.Controllers
         {
             return View();
         }
+    }
+    public class LoginResponse
+    {
+        // Cambiamos a string porque la API envía un UUID
+        public string idAdm { get; set; }
+        public string nombreAdm { get; set; }
+        public string correoAdm { get; set; }
+        public string idOrgAdm { get; set; }
     }
 }
