@@ -4,20 +4,23 @@
 }
 
 <div class="mb-4">
-    <h2>Crear Nuevo Usuario Administrador</h2>
+    <h2 class="mb-1">Crear Nuevo Usuario Administrador</h2>
     <p class="text-muted">Registra un nuevo usuario con acceso al sistema</p>
 </div>
 
-<div class="card shadow-sm" style="max-width: 800px;">
+<div class="card shadow-sm" style="max-width: 800px; border-radius: 12px; border: 1px solid #e3e6f0;">
     <div class="card-body p-4">
         <form asp-action="Create" method="post">
+
+            <input type="hidden" name="idOrgAdm" value="@Context.Session.GetString("OrgId")" />
+
             <div class="row">
-                <div class="col-md-6 mb-3">
+                <div class="col-12 col-md-6 mb-3">
                     <label class="form-label">Nombre Completo</label>
                     <input type="text" name="nombreAdm" class="form-control" placeholder="Ej: Juan Pérez" required />
                 </div>
 
-                <div class="col-md-6 mb-3">
+                <div class="col-12 col-md-6 mb-3">
                     <label class="form-label">Correo Electrónico</label>
                     <input type="email" name="correoAdm" class="form-control" placeholder="usuario@ejemplo.com" required />
                 </div>
@@ -29,20 +32,14 @@
                 <small class="text-muted">La contraseña debe tener al menos 8 caracteres</small>
             </div>
 
-            <div class="mb-3">
-                <label class="form-label">Organización (UUID)</label>
-                <input type="text" name="idOrgAdm" class="form-control" value="@Context.Session.GetString("OrgId")" readonly style="background-color: #e9ecef;" />
-                <small class="text-muted">Organización asignada automáticamente</small>
-            </div>
-
             <hr class="my-4">
 
             <div class="d-flex gap-2">
-                <button type="submit" class="btn btn-success">
-                    <i class="fas fa-user-plus"></i> Crear Usuario
+                <button type="submit" class="btn btn-success shadow-sm">
+                    <i class="fas fa-user-plus me-1"></i> Crear Usuario
                 </button>
-                <a asp-action="Index" class="btn btn-secondary">
-                    <i class="fas fa-times"></i> Cancelar
+                <a asp-action="Index" class="btn btn-secondary shadow-sm">
+                    <i class="fas fa-times me-1"></i> Cancelar
                 </a>
             </div>
         </form>

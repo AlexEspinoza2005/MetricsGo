@@ -1,85 +1,97 @@
-﻿@* Asegúrate de que el namespace coincida con donde pusiste la clase TopicoResponse *@
-@model IEnumerable<InocuoGoMetrics.Controllers.TopicoResponse>
+﻿@model IEnumerable<InocuoGoMetrics.Controllers.TopicoResponse>
 @{
     ViewData["Title"] = "Tópicos";
 }
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
+<div class="row align-items-center mb-4">
+    <div class="col-12 col-md">
         <h2 class="mb-1">Tópicos del Asistente</h2>
-        <p class="text-muted mb-0">Gestiona los temas de conversación del chatbot</p>
+        <p class="text-muted mb-2">Gestiona los temas de conversación del chatbot.</p>
+
+        <div class="d-flex align-items-start text-secondary small">
+            <i class="fas fa-info-circle text-primary mt-1 me-2"></i>
+            <span>
+                Presiona <strong>Editar</strong> en una tarjeta para configurar sus subtópicos.
+            </span>
+        </div>
     </div>
-    <a asp-action="Create" class="btn btn-success">
-        <i class="fas fa-plus"></i> Nuevo Tópico
-    </a>
+    <div class="col-12 col-md-auto mt-3 mt-md-0">
+        <a asp-action="Create" class="btn btn-success shadow-sm w-100">
+            <i class="fas fa-plus"></i> Nuevo Tópico
+        </a>
+    </div>
 </div>
 
 <div class="row">
     @if (Model != null && Model.Any())
     {
+        int contador = 1;
         @foreach (var topico in Model)
         {
             <div class="col-md-6 mb-3">
-                <div class="card shadow-sm h-100">
+                <div class="card shadow-sm h-100" style="border-radius: 12px; border: 1px solid #e3e6f0;">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start mb-3">
                             <div>
-                                <span class="badge bg-primary">Tópico #@topico.idTem</span>
+                                <span class="badge rounded-circle text-white shadow-sm" style="background-color: #007bb5; width: 35px; height: 35px; display: inline-flex; align-items: center; justify-content: center; font-size: 16px;">
+                                    @contador
+                                </span>
                             </div>
-                            <div>
-                                <a asp-action="Edit" asp-route-id="@topico.idTem" class="btn btn-sm btn-outline-primary" title="Editar">
+                            <div class="btn-group">
+                                <a asp-action="Edit" asp-route-id="@topico.idTem" class="btn btn-sm btn-primary shadow-sm" title="Editar" style="border-radius: 6px 0 0 6px;">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <button class="btn btn-sm btn-outline-danger" onclick="confirmarEliminar(@topico.idTem)" title="Eliminar">
+                                <button class="btn btn-sm btn-danger shadow-sm" onclick="confirmarEliminar(@topico.idTem)" title="Eliminar" style="border-radius: 0 6px 6px 0;">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </div>
                         </div>
+
                         <h5 class="card-title">@topico.nombreTem</h5>
+
                         <p class="card-text text-muted">@topico.descriTem</p>
-                        <small class="text-muted">
-                            <i class="fas fa-calendar-alt"></i>
-                            @* Asegúrate de que tu modelo tenga la propiedad creadoTem *@
-                            Creado: @(topico.creadoTem != DateTime.MinValue ? topico.creadoTem.ToString("dd/MM/yyyy") : "N/A")
-                        </small>
+                        <div class="border-top pt-2 mt-3">
+                            <small class="text-muted">
+                                <i class="fas fa-calendar-alt me-1"></i>
+                                Creado: @(topico.creadoTem != DateTime.MinValue ? topico.creadoTem.ToString("dd/MM/yyyy") : "N/A")
+                            </small>
+                        </div>
                     </div>
                 </div>
             </div>
+            contador++;
         }
     }
     else
     {
         <div class="col-12">
-            <div class="alert alert-info">
-                <i class="fas fa-info-circle"></i> No hay tópicos registrados.
-                <a asp-action="Create" class="alert-link">Crear el primero</a>
+            <div class="alert alert-info shadow-sm">
+                <i class="fas fa-info-circle me-2"></i> No hay tópicos registrados.
+                <a asp-action="Create" class="alert-link ms-1">Crear el primero</a>
             </div>
         </div>
     }
 </div>
 
-@* ... El resto del Modal y Scripts se mantienen igual ... *@
-
 <div class="modal fade" id="modalEliminar" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
             <div class="modal-header bg-danger text-white">
                 <h5 class="modal-title">
-                    <i class="fas fa-exclamation-triangle"></i> Confirmar Eliminación
+                    <i class="fas fa-exclamation-triangle me-2"></i> Confirmar Eliminación
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body">
-                <p>¿Estás seguro de que deseas eliminar este tópico?</p>
-                <p class="text-muted mb-0">Esta acción no se puede deshacer.</p>
+            <div class="modal-body text-center py-4">
+                <p class="lead mb-2">¿Estás seguro de que deseas eliminar este tópico?</p>
+                <p class="text-muted mb-0 small">Esta acción no se puede deshacer.</p>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <div class="modal-footer justify-content-center bg-light">
+                <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Cancelar</button>
                 <form id="formEliminar" method="post" style="display:inline;">
-                    @* Es buena práctica usar Antiforgery en formularios POST *@
                     @Html.AntiForgeryToken()
-                    <button type="submit" class="btn btn-danger">
-                        <i class="fas fa-trash"></i> Eliminar
+                    <button type="submit" class="btn btn-danger px-4">
+                        <i class="fas fa-trash me-1"></i> Eliminar
                     </button>
                 </form>
             </div>

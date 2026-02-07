@@ -9,18 +9,12 @@
 </div>
 
 <div class="row">
-    <!-- Columna Izquierda: Formulario del Tópico -->
     <div class="col-md-7">
         <div class="card shadow-sm">
             <div class="card-body p-4">
                 <h5 class="mb-3">Información del Tópico</h5>
                 <form asp-action="Edit" asp-route-id="@Model.idTem" method="post">
                     <input type="hidden" name="idOrgTem" value="@Model.idOrgTem" />
-
-                    <div class="mb-3">
-                        <label class="form-label">ID del Tópico</label>
-                        <input type="text" class="form-control" value="@Model.idTem" readonly style="background-color: #e9ecef;" />
-                    </div>
 
                     <div class="mb-3">
                         <label class="form-label">Título del Tópico</label>
@@ -57,7 +51,6 @@
         </div>
     </div>
 
-    <!-- Columna Derecha: Subcategorías -->
     <div class="col-md-5">
         <div class="card shadow-sm">
             <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
@@ -70,7 +63,6 @@
             </div>
             <div class="card-body p-0">
                 <div id="listaSubcategorias" class="list-group list-group-flush">
-                    <!-- Se llenan dinámicamente -->
                 </div>
                 <div id="noSubcategorias" class="p-4 text-center text-muted" style="display: none;">
                     <i class="fas fa-inbox fa-2x mb-2"></i>
@@ -81,7 +73,6 @@
     </div>
 </div>
 
-<!-- Modal: Crear Subcategoría -->
 <div class="modal fade" id="modalCrearSubcategoria" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -113,7 +104,6 @@
     </div>
 </div>
 
-<!-- Modal: Editar Subcategoría -->
 <div class="modal fade" id="modalEditarSubcategoria" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -154,7 +144,6 @@
     </div>
 </div>
 
-<!-- Modal: Eliminar Subcategoría -->
 <div class="modal fade" id="modalEliminarSubcategoria" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -202,20 +191,21 @@
                     subcategorias.forEach(sub => {
                         const item = document.createElement('div');
                         item.className = 'list-group-item d-flex justify-content-between align-items-start';
+
+
                         item.innerHTML = `
                             <div class="flex-grow-1">
                                 <div class="d-flex align-items-center mb-1">
-                                    <span class="badge bg-secondary me-2">#${sub.idSub}</span>
                                     <strong>${sub.nombreSub}</strong>
                                     ${!sub.activoSub ? '<span class="badge bg-danger ms-2">Inactiva</span>' : ''}
                                 </div>
                                 <p class="mb-0 text-muted small">${sub.descriSub || 'Sin descripción'}</p>
                             </div>
                             <div class="btn-group">
-                                <button class="btn btn-sm btn-outline-warning" onclick='abrirModalEditarSubcategoria(${JSON.stringify(sub)})' title="Editar">
+                                <button class="btn btn-sm btn-primary shadow-sm" style="border-radius: 6px 0 0 6px;" onclick='abrirModalEditarSubcategoria(${JSON.stringify(sub)})' title="Editar">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button class="btn btn-sm btn-outline-danger" onclick="confirmarEliminarSubcategoria(${sub.idSub})" title="Eliminar">
+                                <button class="btn btn-sm btn-danger shadow-sm" style="border-radius: 0 6px 6px 0;" onclick="confirmarEliminarSubcategoria(${sub.idSub})" title="Eliminar">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </div>
@@ -230,6 +220,7 @@
                 console.error('Error al cargar subcategorías:', error);
             }
         }
+
 
         function abrirModalCrearSubcategoria() {
             document.getElementById('nombreSub').value = '';
