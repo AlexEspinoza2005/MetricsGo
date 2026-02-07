@@ -28,7 +28,7 @@
 
                     <div class="mb-3">
                         <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" name="activoTem" id="activoTem" @(Model.activoTem ? "checked" : "") />
+                            @Html.CheckBox("activoTem", Model.activoTem, new { @class = "form-check-input", id = "activoTem" })
                             <label class="form-check-label" for="activoTem">
                                 <strong>Tópico Activo</strong>
                             </label>
