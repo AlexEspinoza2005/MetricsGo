@@ -1,10 +1,13 @@
-using Microsoft.AspNetCore.Mvc;
+using ClosedXML.Excel;
+using InocuoGoMetrics.Filters;
 using InocuoGoMetrics.Services;
 using InocuoGoMetrics.ViewModels;
-using ClosedXML.Excel;
+using Microsoft.AspNetCore.Mvc;
 
 namespace InocuoGoMetrics.Controllers
 {
+    [ValidarSesion]
+
     public class HomeController : Controller
     {
         private readonly ApiService _apiService;

@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using InocuoGoMetrics.Filters;
 using InocuoGoMetrics.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace InocuoGoMetrics.Controllers
 {
+    [ValidarSesion]
+
     public class SubcategoriasController : Controller
     {
         private readonly ApiService _apiService;

@@ -10,25 +10,25 @@
 
 <div class="card shadow-sm" style="max-width: 800px; border-radius: 12px; border: 1px solid #e3e6f0;">
     <div class="card-body p-4">
-        <form asp-action="Create" method="post">
+        <form asp-action="Create" method="post" autocomplete="off">
 
             <input type="hidden" name="idOrgAdm" value="@Context.Session.GetString("OrgId")" />
 
             <div class="row">
                 <div class="col-12 col-md-6 mb-3">
                     <label class="form-label">Nombre Completo</label>
-                    <input type="text" name="nombreAdm" class="form-control" placeholder="Ej: Juan Pérez" required />
+                    <input type="text" name="nombreAdm" class="form-control" placeholder="Ej: Juan Pérez" required autocomplete="off" />
                 </div>
 
                 <div class="col-12 col-md-6 mb-3">
                     <label class="form-label">Correo Electrónico</label>
-                    <input type="email" name="correoAdm" class="form-control" placeholder="usuario@ejemplo.com" required />
+                    <input type="email" name="correoAdm" class="form-control" placeholder="usuario@ejemplo.com" required autocomplete="off" />
                 </div>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Contraseña</label>
-                <input type="password" name="passAdm" class="form-control" placeholder="Mínimo 8 caracteres" required minlength="8" />
+                <input type="password" name="passAdm" class="form-control" placeholder="Mínimo 8 caracteres" required minlength="8" autocomplete="new-password" />
                 <small class="text-muted">La contraseña debe tener al menos 8 caracteres</small>
             </div>
 

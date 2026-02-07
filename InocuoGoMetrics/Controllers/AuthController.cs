@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using InocuoGoMetrics.Filters;
 using InocuoGoMetrics.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace InocuoGoMetrics.Controllers
 {
@@ -25,12 +26,11 @@ namespace InocuoGoMetrics.Controllers
             try
             {
                 var loginData = new { login, password };
-                // Cambiamos Dictionary por LoginResponse
+
                 var response = await _apiService.PostAsync<LoginResponse>("UsuariosAdmin/login", loginData);
 
                 if (response != null)
                 {
-                    // Ahora el acceso es directo y seguro
                     HttpContext.Session.SetString("UsuarioId", response.idAdm.ToString());
                     HttpContext.Session.SetString("UsuarioNombre", response.nombreAdm);
                     HttpContext.Session.SetString("UsuarioCorreo", response.correoAdm);
@@ -44,7 +44,16 @@ namespace InocuoGoMetrics.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.Error = "Error al iniciar sesión: " + ex.Message;
+                if (ex.Message.Contains("401") || ex.Message.Contains("Unauthorized"))
+                {
+                    ViewBag.Error = "Credenciales incorrectas. Por favor verifica tu correo y contraseña.";
+                }
+                else
+                {
+                    ViewBag.Error = "No se pudo conectar con el servidor. Intente más tarde.";
+ 
+                }
+
                 return View();
             }
         }
