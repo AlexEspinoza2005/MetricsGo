@@ -2,75 +2,189 @@
     Layout = null;
 }
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>Login - InocuoGo</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Iniciar Sesión - InocuoGo</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
     <style>
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-color: #e9ecef;
             min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', sans-serif;
+            padding: 20px;
         }
 
         .login-card {
-            border-radius: 15px;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding: 1.5rem 2.5rem 2.5rem 2.5rem;
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid #dee2e6;
+        }
+
+        .brand-logo {
+            width: 140px;
+            height: auto;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: -5px;
+            margin-bottom: 5px;
+            transition: all 0.3s ease; 
+        }
+
+        .fallback-block {
+            display: none;
+            margin-bottom: 1rem;
+        }
+
+        .fallback-icon {
+            font-size: 5rem;
+            color: #198754;
+        }
+
+        .login-title {
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #333;
+            font-size: 1.6rem;
+            margin-top: 0;
+        }
+
+        .custom-input-group {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            background-color: #f8f9fa;
+            transition: all 0.2s;
             overflow: hidden;
         }
 
-        .logo-section {
-            background: linear-gradient(180deg, #2ecc71 0%, #27ae60 100%);
-            color: white;
-            padding: 40px;
+            .custom-input-group:focus-within {
+                border-color: #198754;
+                background-color: #fff;
+                box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.15);
+            }
+
+            .custom-input-group .input-group-text {
+                background-color: transparent;
+                border: none;
+                color: #6c757d;
+                padding-left: 1rem;
+                padding-right: 0.5rem;
+            }
+
+            .custom-input-group .form-control {
+                border: none;
+                box-shadow: none;
+                background-color: transparent;
+                padding: 0.7rem 0.7rem 0.7rem 0.2rem;
+                color: #333;
+            }
+
+        .btn-ingresar {
+            background-color: #198754;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            padding: 0.8rem;
+            transition: all 0.2s;
+            font-size: 1rem;
+        }
+
+            .btn-ingresar:hover {
+                background-color: #157347;
+                transform: translateY(-1px);
+            }
+
+        .alert-danger {
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        @@media (max-width: 576px) {
+            .login-card
+
+        {
+            padding: 1.5rem 1.5rem 2rem 1.5rem;
+        }
+
+        .brand-logo {
+            width: 140px;
+            margin-top: -10px; 
+        }
+
+        .login-title {
+            font-size: 1.4rem; 
+        }
+
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="row justify-content-center align-items-center min-vh-100">
-            <div class="col-md-5">
-                <div class="card shadow-lg login-card">
-                    <div class="logo-section text-center">
-                        <i class="fas fa-leaf fa-4x mb-3"></i>
-                        <h2 class="mb-1">InocuoGo</h2>
-                        <p class="mb-0">Sistema de Gestión</p>
-                    </div>
-                    <div class="card-body p-5">
-                        <h4 class="text-center mb-4">Iniciar Sesión</h4>
 
-                        @if (ViewBag.Error != null)
-                        {
-                            <div class="alert alert-danger">@ViewBag.Error</div>
-                        }
+    <div class="login-card text-center">
+        <img src="~/img/logo.png"
+             alt="Logo InocuoGo"
+             class="brand-logo"
+             id="mainLogo"
+             onerror="this.style.display='none'; document.getElementById('backupBlock').style.display='block';" />
 
-                        <form asp-action="Login" method="post">
-                            <div class="mb-4">
-                                <label class="form-label">Correo Electrónico</label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                                    <input type="email" name="login" class="form-control" placeholder="usuario@mail.com" required />
-                                </div>
-                            </div>
-                            <div class="mb-4">
-                                <label class="form-label">Contraseña</label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                                    <input type="password" name="password" class="form-control" placeholder="••••••••" required />
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-success w-100 py-2">
-                                <i class="fas fa-sign-in-alt"></i> Ingresar al Sistema
-                            </button>
-                        </form>
-                        <div class="text-center mt-4">
-                            <a asp-action="RecuperarPassword" class="text-decoration-none text-muted">
-                                <small>¿Olvidaste tu contraseña?</small>
-                            </a>
-                        </div>
-                    </div>
+        <div id="backupBlock" class="fallback-block">
+            <i class="fas fa-leaf fallback-icon"></i>
+            <h4 class="text-success fw-bold mt-2 mb-0">InocuoGo</h4>
+        </div>
+
+        <h2 class="login-title">Iniciar Sesión</h2>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger py-2 mb-3 border-0 shadow-sm text-start">
+                <i class="fas fa-exclamation-circle me-1"></i> @ViewBag.Error
+            </div>
+        }
+
+        <form asp-action="Login" method="post" class="text-start">
+            <div class="mb-3">
+                <label class="form-label text-muted small fw-bold mb-1">Correo Electrónico</label>
+                <div class="custom-input-group">
+                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                    <input type="email" name="login" class="form-control" placeholder="nombre@ejemplo.com" required />
                 </div>
             </div>
-        </div>
+
+            <div class="mb-3">
+                <label class="form-label text-muted small fw-bold mb-1">Contraseña</label>
+                <div class="custom-input-group">
+                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                    <input type="password" name="password" class="form-control" placeholder="••••••••" required />
+                </div>
+                <div class="text-end mt-2">
+                    <a asp-action="RecuperarPassword" class="text-decoration-none small text-muted hover-primary" style="font-size: 0.85rem;">
+                        ¿Olvidaste tu contraseña?
+                    </a>
+                </div>
+            </div>
+
+            <div class="d-grid mt-4">
+                <button type="submit" class="btn btn-success btn-ingresar text-white shadow-sm">
+                    Ingresar al Sistema
+                </button>
+            </div>
+        </form>
     </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
