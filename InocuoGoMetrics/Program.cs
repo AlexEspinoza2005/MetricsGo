@@ -6,7 +6,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddHttpClient<ApiService>();
 
-
+builder.Services.AddScoped<EmailService>();
 
 builder.Services.AddSession(options =>
 {
