@@ -19,7 +19,6 @@ namespace InocuoGoMetrics.Services
                 var settings = _configuration.GetSection("SmtpSettings");
 
                 Console.WriteLine($"📧 Enviando correo a: {destino}");
-                Console.WriteLine($"📧 Asunto: {asunto}");
 
                 var mail = new MailMessage
                 {
@@ -33,10 +32,10 @@ namespace InocuoGoMetrics.Services
 
                 using (var smtp = new SmtpClient(settings["Server"], int.Parse(settings["Port"])))
                 {
+                    smtp.UseDefaultCredentials = false;
+                    smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
                     smtp.Credentials = new NetworkCredential(settings["SenderEmail"], settings["Password"]);
                     smtp.EnableSsl = true;
-                    smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-                    smtp.UseDefaultCredentials = false;
 
                     Console.WriteLine("📧 Conectando al servidor SMTP...");
                     await smtp.SendMailAsync(mail);
