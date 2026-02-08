@@ -1,13 +1,10 @@
-using ClosedXML.Excel;
-using InocuoGoMetrics.Filters;
+using Microsoft.AspNetCore.Mvc;
 using InocuoGoMetrics.Services;
 using InocuoGoMetrics.ViewModels;
-using Microsoft.AspNetCore.Mvc;
+using ClosedXML.Excel;
 
 namespace InocuoGoMetrics.Controllers
 {
-    [ValidarSesion]
-
     public class HomeController : Controller
     {
         private readonly ApiService _apiService;
@@ -40,20 +37,25 @@ namespace InocuoGoMetrics.Controllers
         public async Task<IActionResult> EditarPerfil(Guid id, string nombreAdm, string correoAdm, string passwAdm)
         {
             var usuarioId = HttpContext.Session.GetString("UsuarioId");
+
             if (string.IsNullOrEmpty(usuarioId))
             {
                 return RedirectToAction("Login", "Auth");
             }
+
             var data = new
             {
                 nombreAdm,
                 correoAdm,
-                passwAdm,
+                passAdm = passwAdm,
                 idOrgAdm = HttpContext.Session.GetString("OrgId")
             };
             await _apiService.PutAsync($"UsuariosAdmin/{usuarioId}", data);
+            HttpContext.Session.SetString("UsuarioNombre", nombreAdm);
+
             ViewBag.Success = "Perfil actualizado correctamente";
-            return RedirectToAction("Index");
+            var usuarioActualizado = await _apiService.GetAsync<dynamic>($"UsuariosAdmin/{usuarioId}");
+            return View(usuarioActualizado);
         }
 
         public IActionResult Privacy()
