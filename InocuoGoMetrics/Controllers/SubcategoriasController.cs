@@ -1,11 +1,11 @@
 ﻿using InocuoGoMetrics.Filters;
 using InocuoGoMetrics.Services;
+using InocuoGoMetrics.DTOs; 
 using Microsoft.AspNetCore.Mvc;
 
 namespace InocuoGoMetrics.Controllers
 {
     [ValidarSesion]
-
     public class SubcategoriasController : Controller
     {
         private readonly ApiService _apiService;
@@ -67,31 +67,5 @@ namespace InocuoGoMetrics.Controllers
                 return BadRequest();
             }
         }
-    }
-
-    // Modelos
-    public class SubcategoriaResponse
-    {
-        public long idSub { get; set; }
-        public string nombreSub { get; set; }
-        public string descriSub { get; set; }
-        public long idTemSub { get; set; }
-        public bool activoSub { get; set; }
-        public DateTime creadoSub { get; set; }
-    }
-
-    public class SubcategoriaRequest
-    {
-        public string nombreSub { get; set; }
-        public string descriSub { get; set; }
-        public long idTemSub { get; set; }
-    }
-
-    public class SubcategoriaUpdateRequest
-    {
-        public string nombreSub { get; set; }
-        public string descriSub { get; set; }
-        public long idTemSub { get; set; }
-        public bool activoSub { get; set; }
     }
 }

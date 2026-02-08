@@ -1,5 +1,6 @@
 ﻿using InocuoGoMetrics.Filters;
 using InocuoGoMetrics.Services;
+using InocuoGoMetrics.DTOs; 
 using Microsoft.AspNetCore.Mvc;
 
 namespace InocuoGoMetrics.Controllers
@@ -86,17 +87,17 @@ namespace InocuoGoMetrics.Controllers
 
                 string link = Url.Action("CambiarPassword", "Auth", new { token = correoAdm }, Request.Scheme);
 
-                // ✅ HTML ULTRA-SIMPLE (Gmail no lo bloqueará)
+                // ✅ HTML ULTRA-SIMPLE
                 string mensaje = $@"
-<html>
-<body>
-<h2>InocuoGo - Restablecer Contraseña</h2>
-<p>Hola <strong>{usuario.nombreAdm}</strong>,</p>
-<p>Haz clic en el siguiente enlace para cambiar tu contraseña:</p>
-<p><a href='{link}' style='color: #198754; font-size: 16px;'>Cambiar mi contraseña</a></p>
-<p>Si no solicitaste este cambio, ignora este correo.</p>
-</body>
-</html>";
+                <html>
+                <body>
+                <h2>InocuoGo - Restablecer Contraseña</h2>
+                <p>Hola <strong>{usuario.nombreAdm}</strong>,</p>
+                <p>Haz clic en el siguiente enlace para cambiar tu contraseña:</p>
+                <p><a href='{link}' style='color: #198754; font-size: 16px;'>Cambiar mi contraseña</a></p>
+                <p>Si no solicitaste este cambio, ignora este correo.</p>
+                </body>
+                </html>";
 
                 bool enviado = await _emailService.EnviarCorreo(correoAdm, "Cambiar Contraseña - InocuoGo", mensaje);
 
@@ -113,7 +114,6 @@ namespace InocuoGoMetrics.Controllers
                 return View();
             }
         }
-
 
         // GET: Auth/CambiarPassword
         [HttpGet]
@@ -170,22 +170,5 @@ namespace InocuoGoMetrics.Controllers
                 return View();
             }
         }
-    }
-
-    // Modelos exclusivos de Auth
-    public class LoginResponse
-    {
-        public string idAdm { get; set; }
-        public string nombreAdm { get; set; }
-        public string correoAdm { get; set; }
-        public string idOrgAdm { get; set; }
-    }
-
-    public class UsuarioDto
-    {
-        public string idAdm { get; set; }
-        public string nombreAdm { get; set; }
-        public string correoAdm { get; set; }
-        public string idOrgAdm { get; set; }
     }
 }

@@ -1,11 +1,11 @@
 ﻿using InocuoGoMetrics.Filters;
 using InocuoGoMetrics.Services;
+using InocuoGoMetrics.DTOs; 
 using Microsoft.AspNetCore.Mvc;
 
 namespace InocuoGoMetrics.Controllers
 {
     [ValidarSesion]
-
     public class TopicosController : Controller
     {
         private readonly ApiService _apiService;
@@ -60,7 +60,7 @@ namespace InocuoGoMetrics.Controllers
                 descriTem = descriTem,
                 idOrgTem = idOrgTem,
                 activoTem = activoTem,
-                creadoTem = topicoActual.creadoTem
+                creadoTem = topicoActual.creadoTem 
             };
 
             await _apiService.PutAsync($"Topicos/{id}", topico);
@@ -73,15 +73,5 @@ namespace InocuoGoMetrics.Controllers
             await _apiService.DeleteAsync($"Topicos/{id}");
             return RedirectToAction(nameof(Index));
         }
-    }
-
-    public class TopicoResponse
-    {
-        public long idTem { get; set; }
-        public string nombreTem { get; set; }
-        public string descriTem { get; set; }
-        public DateTime creadoTem { get; set; }
-        public string idOrgTem { get; set; }
-        public bool activoTem { get; set; }
     }
 }
