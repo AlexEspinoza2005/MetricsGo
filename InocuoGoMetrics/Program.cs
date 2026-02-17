@@ -6,7 +6,8 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddHttpClient<ApiService>();
 
-builder.Services.AddScoped<EmailService>();
+//builder.Services.AddScoped<EmailService>(); usar para smtp 
+builder.Services.AddScoped<SendGridEmailService>();
 
 builder.Services.AddSession(options =>
 {

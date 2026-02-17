@@ -1,5 +1,4 @@
-﻿using InocuoGoMetrics.Filters;
-using InocuoGoMetrics.Services;
+﻿using InocuoGoMetrics.Services;
 using InocuoGoMetrics.DTOs; 
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,9 +7,9 @@ namespace InocuoGoMetrics.Controllers
     public class AuthController : Controller
     {
         private readonly ApiService _apiService;
-        private readonly EmailService _emailService;
+        private readonly SendGridEmailService _emailService; 
 
-        public AuthController(ApiService apiService, EmailService emailService)
+        public AuthController(ApiService apiService, SendGridEmailService emailService) 
         {
             _apiService = apiService;
             _emailService = emailService;
@@ -87,17 +86,45 @@ namespace InocuoGoMetrics.Controllers
 
                 string link = Url.Action("CambiarPassword", "Auth", new { token = correoAdm }, Request.Scheme);
 
-                // ✅ HTML ULTRA-SIMPLE
                 string mensaje = $@"
-                <html>
-                <body>
-                <h2>InocuoGo - Restablecer Contraseña</h2>
-                <p>Hola <strong>{usuario.nombreAdm}</strong>,</p>
-                <p>Haz clic en el siguiente enlace para cambiar tu contraseña:</p>
-                <p><a href='{link}' style='color: #198754; font-size: 16px;'>Cambiar mi contraseña</a></p>
-                <p>Si no solicitaste este cambio, ignora este correo.</p>
-                </body>
-                </html>";
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+</head>
+<body style='font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;'>
+    <div style='max-width: 600px; margin: 0 auto; background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);'>
+        <div style='text-align: center; margin-bottom: 30px;'>
+            <h1 style='color: #198754; margin: 0;'>🍃 InocuoGo</h1>
+        </div>
+        
+        <h2 style='color: #333; margin-bottom: 20px;'>Restablecer Contraseña</h2>
+        
+        <p style='color: #666; font-size: 16px; line-height: 1.5;'>
+            Hola <strong>{usuario.nombreAdm}</strong>,
+        </p>
+        
+        <p style='color: #666; font-size: 16px; line-height: 1.5;'>
+            Recibimos una solicitud para restablecer tu contraseña. Haz clic en el botón de abajo para crear una nueva contraseña:
+        </p>
+        
+        <div style='text-align: center; margin: 30px 0;'>
+            <a href='{link}' style='display: inline-block; background-color: #198754; color: white; padding: 15px 40px; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 16px;'>
+                CAMBIAR MI CONTRASEÑA
+            </a>
+        </div>
+        
+        <p style='color: #999; font-size: 14px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;'>
+            Si no solicitaste este cambio, puedes ignorar este correo.
+        </p>
+        
+        <p style='color: #999; font-size: 12px; margin-top: 10px;'>
+            O copia este enlace en tu navegador:<br>
+            <a href='{link}' style='color: #198754; word-break: break-all;'>{link}</a>
+        </p>
+    </div>
+</body>
+</html>";
 
                 bool enviado = await _emailService.EnviarCorreo(correoAdm, "Cambiar Contraseña - InocuoGo", mensaje);
 
